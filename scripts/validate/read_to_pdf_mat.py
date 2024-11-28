@@ -2,14 +2,6 @@ import os
 import re
 import pdfplumber
 
-def validate_mat(mat_file):
-    print("validate mat is called, validating {mat_file}")
-
-
-def extract_mat(mat_file):
-    print("extract mat is called, extracting {mat_file}")
-    return "원재료 추출 텍스트"
-
 def clean_table_data(tables):
     """
     표 데이터에서 줄바꿈 제거 및 None 값을 처리하여 데이터를 정리.
@@ -149,3 +141,5 @@ def process_pdf(file_path, fixed_header, fixed_items):
 pdf_file_path = r"C:\Users\USER\Desktop\박창선업무\2024-11-27\압박용밴드 형태별 의료기기 표준서식_test\압박용밴드 형태별 의료기기 표준서식\압박용밴드_스타킹형태 서식\1Oyird8Hdli원재료.pdf"
 
 process_pdf(pdf_file_path, fixed_header, fixed_items)
+
+
