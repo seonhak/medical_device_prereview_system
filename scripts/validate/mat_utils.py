@@ -146,6 +146,6 @@ def process_pdf(file_path, fixed_header, fixed_items):
     except ValueError as e:
         print(e)
 
-pdf_file_path = r"C:\Users\USER\Desktop\박창선업무\2024-11-27\압박용밴드 형태별 의료기기 표준서식_test\압박용밴드 형태별 의료기기 표준서식\압박용밴드_스타킹형태 서식\1Oyird8Hdli원재료.pdf"
+pdf_file_path = ""
 
 process_pdf(pdf_file_path, fixed_header, fixed_items)
