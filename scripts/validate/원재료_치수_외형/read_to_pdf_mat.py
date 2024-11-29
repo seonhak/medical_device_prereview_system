@@ -1,6 +1,35 @@
 import os
 import re
 import pdfplumber
+from forbidden_words import *
+def check_forbidden_words(data, forbidden_words):
+    """
+    데이터에서 금지 단어를 탐지.
+    :param data: 필터링된 데이터 (filtered_data 또는 cleaned_tables)
+    :param forbidden_words: 금지 단어 리스트
+    :return: 금지 단어가 포함된 행 및 단어 목록
+    """
+    problems = []
+    for row_idx, row in enumerate(data, start=1):
+        for cell in row:
+            if cell:
+                for word in forbidden_words:
+                    if word in cell:
+                        problems.append((row_idx, word, cell))
+    return problems
+
+
+# 금지 단어 탐지 실행
+def validate_data_forbidden_words(filtered_data, forbidden_words):
+    problems = check_forbidden_words(filtered_data, forbidden_words)
+    if problems:
+        print("\n[금지 단어 발견]")
+        for problem in problems:
+            row_idx, word, cell = problem
+            print(f"금지 단어 '{word}'가 {row_idx}번째 행에 발견됨: '{cell}'")
+    else:
+        print("\n금지 단어 없음.")
+
 
 def clean_table_data(tables):
     """
@@ -82,7 +111,6 @@ fixed_items = [
         ['원재료 제조자 정보', '제품명 또는 상품명', '', '', ''],
         ['원재료 제조자 정보', '제품번호 또는 모델명', '', '', '']
     ]
-standard_word_list = ['일련 번호', '원재료 공통 기재사항', '일반명']
 def validate_and_process_filtered_data(filtered_data):
     """
     filtered_data에서 특정 조건을 검증하고 에러 처리를 수행.
@@ -129,6 +157,10 @@ def process_pdf(file_path, fixed_header, fixed_items):
         # 테이블 데이터 전처리 및 매핑
         cleaned_tables = clean_table_data(all_tables)
         filtered_data = map_data_to_fixed_items1(cleaned_tables, fixed_header, fixed_items)
+
+        # 금지 단어 검증        
+        validate_data_forbidden_words(filtered_data, forbidden_words)
+
         # 최종 결과 출력
         print("\n[최종 처리된 데이터]")
         for table in filtered_data:
@@ -138,6 +170,8 @@ def process_pdf(file_path, fixed_header, fixed_items):
     except ValueError as e:
         print(e)
 
-pdf_file_path = ""
+pdf_file_path = r""
 
 process_pdf(pdf_file_path, fixed_header, fixed_items)
+
+
