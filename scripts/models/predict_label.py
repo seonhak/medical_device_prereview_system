@@ -4,7 +4,7 @@ from kobert_transformers import get_tokenizer
 from .utils import predict, preprocess_input
 
 def predict_label(input_text):
-        
+    
     # 모델 및 토크나이저 로드
     model_dir = "C:\\Users\\USER\\Desktop\식약처\\medical_device_prereview_system\\scripts\\models\\finetuned_kobert"
     tokenizer = get_tokenizer()
@@ -15,4 +15,4 @@ def predict_label(input_text):
     inputs = preprocess_input(input_text, tokenizer)
     # print(inputs)
     predicted_label = predict(input_text, tokenizer, model, device)
-    print(f"Predicted Label: {predicted_label}")
+    print(f"Predicted Label about {input_text} : {predicted_label}")
