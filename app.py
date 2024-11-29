@@ -33,9 +33,9 @@ mat_result = text_list_in_docs[0]
 shape_result = text_list_in_docs[1]
 size_result = text_list_in_docs[2]
 
-print(mat_result)
-print(shape_result)
-print(size_result)
+# print(mat_result)
+# print(shape_result)
+# print(size_result)
 
 # 입력 문장에 대해 예측한 라벨을 출력하는 함수
 # 입력 문장이 단순 string이 아닌 list나 dict형태가 될 경우 그에 맞게 predict_label 함수를 변경해줘야함
@@ -45,3 +45,4 @@ predict_label(size_result)
 
 # 0:접수처리 / 1:모양 및 구조 - 작용원리 / 2:모양 및 구조 - 외형 / 3:모양 및 구조 - 치수
 # 4:원재료 / 5:사용목적 / 6:사용방법 / 7:사용 시 주의사항
+
