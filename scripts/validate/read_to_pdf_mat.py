@@ -1,10 +1,10 @@
 import os
 import re
 import pdfplumber
-from forbidden_words import *
-from save_error_to_txt import *
+from .forbidden_words import *
+from .save_error_to_txt import *
 # 원재료
-
+error_messages = []  # 모든 오류 메시지를 저장할 리스트
 fixed_header = ['일련번호', '부분품의명칭', '원재료명또는성분명', '규격', '분량', '비고(인체접촉여부및접촉부위첨가목적)']
     # return 들어갈 자리
 fixed_items = [
@@ -109,12 +109,10 @@ def clean_and_filter_list(data):
 
     return cleaned_list
 
-error_messages = []  # 모든 오류 메시지를 저장할 리스트
-def process_pdf(file_path):
+def validate_mat(file_path):
+    
     all_tables = []
     all_tables1= []
-    invalid_tables = []  # 유효하지 않은 테이블 기록
-    problem_values = []
 
     with pdfplumber.open(file_path) as pdf:
         for page_number, page in enumerate(pdf.pages, start=0):
@@ -177,7 +175,7 @@ def process_pdf(file_path):
                     )
                     error_messages.append(error_message)
                     # a 초기화
-                a = float(data[4])   
+                a = float(data[4])
                 b = data[0]  
         if not a == 100.0:
             error_message = (
@@ -193,4 +191,7 @@ def process_pdf(file_path):
     for error in error_messages:
         print(error)
         
+    for row in all_tables1:
+        all_tables.append(all_tables1)
+    
     return all_tables, error_messages

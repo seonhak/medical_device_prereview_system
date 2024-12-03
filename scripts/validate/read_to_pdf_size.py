@@ -1,6 +1,6 @@
 import pdfplumber
-from forbidden_words import forbidden_words  # 금지 단어 리스트
-from save_error_to_txt import save_error_to_file  # 에러 저장 함수
+from .forbidden_words import forbidden_words  # 금지 단어 리스트
+from .save_error_to_txt import save_error_to_file  # 에러 저장 함수
 # 치수
 
 fixed_header = ['번호', '명칭', '치수']
@@ -43,7 +43,7 @@ def table_to_dict(table):
 
 def validate_dict_data(dict_data, forbidden_words):
     """딕셔너리 데이터를 검증."""
-    errors = []
+    error_messages = []  # 모든 오류 메시지를 저장할 리스트
     for idx, item in enumerate(dict_data, start=1):
         row_errors = []
         # "번호" 검증 - 숫자여야 하며 부등호 포함 불가
@@ -63,8 +63,8 @@ def validate_dict_data(dict_data, forbidden_words):
             row_errors.append(f"'치수'가 올바른 숫자가 아님 또는 부등호 포함: {item['치수']}")
 
         if row_errors:
-            errors.append({"row": idx, "errors": row_errors})
-    return errors
+            error_messages.append({"row": idx, "errors": row_errors})
+    return error_messages
 
 def validate_size(file_path):
     """PDF 파일을 읽고 고정 헤더와 비교하며, 고정 헤더 불일치 시 검증을 중단."""

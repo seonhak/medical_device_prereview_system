@@ -1,7 +1,7 @@
-from readpdf import *
+# from .readpdf import *
 import os
 import re
-from .read_to_pdf_mat import *
+# from .read_to_pdf_mat import *
 
 def find_pdf_files_with_keyword(folder_path, keyword):
     """

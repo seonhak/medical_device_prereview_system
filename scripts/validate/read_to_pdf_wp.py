@@ -1,8 +1,8 @@
 import os
 import re
 import pdfplumber 
-from required_wp import *
-from forbidden_words import *
+from .required_wp import *
+from .forbidden_words import *
 # 작용원리
 
 # 정규화 함수 확장
@@ -19,14 +19,14 @@ def normalize_text(text):
     return normalized.strip()
 
 def process_data_with_normalization(data, required_phrases, forbidden_words):
-    problems = []
+    error_messages = []  # 모든 오류 메시지를 저장할 리스트
     # 데이터 정규화
     normalized_data = normalize_text(data)
     # 필수 문장 포함 여부 확인
     for phrase_pattern in required_phrases:
         normalized_phrase = normalize_text(phrase_pattern)  # 필수 문장 정규화
         if normalized_phrase not in normalized_data:
-            problems.append(f"문제: 필수 문장 '{phrase_pattern}'가 데이터 전체에 포함되지 않았습니다.")
+            error_messages.append(f"문제: 필수 문장 '{phrase_pattern}'가 데이터 전체에 포함되지 않았습니다.")
 
     # 금지 단어 포함 여부 확인
     lines = data.splitlines()
@@ -35,14 +35,15 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
         for word_pattern in forbidden_words:
             normalized_word = normalize_text(word_pattern)  # 금지 단어 정규화
             if re.search(normalized_word, normalized_line):
-                problems.append(f"문제: 금지 단어 '{word_pattern}'가 {line_number}번째 줄에 발견되었습니다.")
+                error_messages.append(f"문제: 금지 단어 '{word_pattern}'가 {line_number}번째 줄에 발견되었습니다.")
     # 결과 출력
-    if problems:
+    if error_messages:
         print("다음과 같은 문제가 발견되었습니다:")
-        for problem in problems:
-            print(problem)
+        for error in error_messages:
+            print(error)
     else:
         print("문제 없음. 모든 조건을 만족합니다.")
+    return error_messages
 
 #############################################################
 #스타킹#
@@ -113,12 +114,15 @@ def validate_wp_self_adhesive_bandage1(pdf_file_path):
     except Exception as e:
         print(f"Error reading PDF: {e}")
 
+#################################################
+
 def validate_wp(file_path, code):
     if code == 1:
         validate_wp_stockings1(file_path)
     elif code == 2:
-        val
-#################################################
+        validate_wp_belt1(file_path)
+    elif code ==3:
+        validate_wp_self_adhesive_bandage1(file_path)
 
 # pdf_file_path = r"C:\Users\USER\Desktop\박창선업무\2024-11-27\압박용밴드 형태별 의료기기 표준서식_test\압박용밴드 형태별 의료기기 표준서식\압박용밴드_스타킹형태 서식\사용방법 (3).pdf"
 # pdf_file_path1 = r"C:\Users\USER\Desktop\박창선업무\2024-11-27\압박용밴드 형태별 의료기기 표준서식_test\압박용밴드 형태별 의료기기 표준서식\압박용밴드_스타킹형태 서식\모양및구조-작용원리_스타킹.pdf"

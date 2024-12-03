@@ -1,6 +1,6 @@
 import pdfplumber
-from forbidden_words import forbidden_words  # 금지 단어 리스트
-from save_error_to_txt import save_error_to_file  # 에러 저장 함수
+from .forbidden_words import forbidden_words  # 금지 단어 리스트
+from .save_error_to_txt import save_error_to_file  # 에러 저장 함수
 # 외형
 
 fixed_header = ['번호', '명칭', '기능 및 역할']
@@ -26,7 +26,7 @@ def table_to_dict(table):
 
 def validate_dict_data(dict_data, forbidden_words):
     """딕셔너리 데이터를 검증."""
-    errors = []
+    error_messages = []  # 모든 오류 메시지를 저장할 리스트
     for idx, item in enumerate(dict_data, start=1):
         row_errors = []
         # "번호" 검증
@@ -50,14 +50,14 @@ def validate_dict_data(dict_data, forbidden_words):
                     row_errors.append(f"'기능 및 역할'에 금지 단어 '{word}' 포함")
 
         if row_errors:
-            errors.append({"row": idx, "errors": row_errors})
-    return errors
+            error_messages.append({"row": idx, "errors": row_errors})
+    return error_messages
 
 def validate_shape(file_path):
     """PDF 파일을 읽고 딕셔너리를 기반으로 검증."""
     all_tables = []
     error_messages = []
-
+    
     with pdfplumber.open(file_path) as pdf:
         for page_number, page in enumerate(pdf.pages, start=1):
             print(f"페이지 {page_number} 처리 중...")
@@ -98,6 +98,5 @@ def validate_shape(file_path):
             print(msg)
     else:
         print("\n모든 테이블이 검증을 통과했습니다.")
-
     return all_tables, error_messages
 
