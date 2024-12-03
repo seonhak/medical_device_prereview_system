@@ -3,6 +3,8 @@ import re
 import pdfplumber
 from .forbidden_words import *
 from .save_error_to_txt import *
+# from forbidden_words import *
+# from save_error_to_txt import *
 # 원재료
 error_messages = []  # 모든 오류 메시지를 저장할 리스트
 fixed_header = ['일련번호', '부분품의명칭', '원재료명또는성분명', '규격', '분량', '비고(인체접촉여부및접촉부위첨가목적)']
@@ -51,7 +53,10 @@ def check_invalid_words(data_list):
                 continue
             for invalid_word in forbidden_words:
                 if invalid_word in row:  # 문자열 비교
-                    error_messages.append((row + ' / 금지단어 : ' + invalid_word))
+                    error_message = (
+                        f'사용 불가 단어가 확인되었습니다. 사용자 데이터 : {row}  사용 불가 단어 : {invalid_word}'
+                    )
+                    error_messages.append(error_message)
                     continue  # 하나의 단어만 일치해도 중단
 
 def preprocess_row(row):
@@ -118,57 +123,66 @@ def validate_mat(file_path):
             page_tables = page.extract_tables()
             for table_number,table in enumerate(page_tables, start=0):
                 first_row = preprocess_row(table[0])
-                if first_row == fixed_header :
-                    for table_data in table[1:]:
-                        a = clean_and_filter_list(table_data)
-                        
-                        
-                        temp = ' '
-                        for r in a :
-                            temp = temp + r
-                        result_tables.append(temp)
-                        
-                        if ( len(a) > 0 and
-                            a[0] is not None and str(a[0]).isdigit() and
-                            a[4] is not None and str(a[4]).isdigit()
-                        ):                            
-                            all_tables.append(a)
-                            # print(a[3])
-                            # print(all_tables[0][3])
-                            continue
-                        elif len(all_tables) == 0:
-                            continue
-                        elif len(a) > 0 and a[0] in all_tables[0][3]:
-                            all_tables1.append(a)
-                        elif len(a) > 0 and a[0] in valid_keywords:
-                            all_tables1.append(a)
-                        elif len(a) > 0 and a[0] in valid_keywords2:
-                            a.insert(0,'원재료공통기재사항')
-                            all_tables1.append(a)
-                        elif len(a) > 0 and a[0] in valid_keywords3:
-                            a.insert(0,'원재료제조자정보')
-                            all_tables1.append(a)
-                        elif len(a) > 0 and a[0] in valid_keywords4:
-                            a.insert(0,'제품번호또는모델명')
-                            all_tables1.append(a)
-                        elif a == '':
-                            error_message = (
-                                f'데이터가 비어 있습니다 - {a}'
-                            )
-                            error_messages.append(error_message)                                                        
-                        else :
-                            # error_message = (
-                            #     f'일련번호 또는 분량이 비어있거나 잘못된 형태로 입력되었습니다 - {a}'
-                            # )
-                            # error_messages.append(error_message)
-                            continue                    
-                else:
+                if first_row != fixed_header :
                     error_message = (
-                        f'- 형식이 옳바르지 않습니다 - {first_row}'
+                        f'형식이 일치하지 않습니다 : 사용자 데이터 : {first_row} 기준 데이터 : {fixed_header}'
                     )
-                    error_messages.append(error_message)
-                    continue
+                # if first_row == fixed_header :
+                for table_data in table[1:]:
+                    print(table_data)
+                    a = clean_and_filter_list(table_data)
+                    temp = ' '
+                    for r in a :
+                        temp = temp + r
+                    result_tables.append(temp)
+                    if ( len(a) > 0 and
+                        a[0] is not None and str(a[0]).isdigit() and
+                        a[4] is not None and str(a[4]).isdigit()
+                    ):                            
+                        all_tables.append(a)
+                        continue
+                    elif len(all_tables) == 0:
+                        error_message = (
+                            f'데이터 형식이 옳바르지 않습니다 - {a}'
+                        )
+                        error_messages.append(error_message)
+                        all_tables.append(a)
+                    elif len(a) > 0 and a[0] in all_tables[0][3]:
+                        all_tables1.append(a)
+                    elif len(a) > 0 and a[0] in valid_keywords:
+                        all_tables1.append(a)
+                    elif len(a) > 0 and table_data[0] == None or table_data[0] =='':
+                        print(type(a))
+                        for data_row in a:
+                            print(data_row)
+                            if data_row in valid_keywords2:
+                                a.insert(0,'원재료공통기재사항')
+                                all_tables1.append(a)
+                                break
+                            elif data_row in valid_keywords3:
+                                a.insert(0,'원재료제조자정보')
+                                all_tables1.append(a)
+                                break
+                            elif data_row in valid_keywords4:
+                                a.insert(0,'제품번호또는모델명')
+                                all_tables1.append(a)
+                                break
+                            # else:
+                            #     error_message = (
+                            #         f'{valid_keywords}가 포함되지 않았습니다 - {data_row}'                                    
+                            #     )
+                            #     error_messages.append(error_message)
+                            #     continue
+                    elif a == '':
+                        error_message = (
+                            f'데이터가 비어 있습니다 - {table_data}'
+                        )
+                        error_messages.append(error_message)                                                        
+                    else :
 
+                        continue               
+
+    if len(all_tables) > 0:
         a = float(0)
         b = all_tables[0][0]
         for data in all_tables:
@@ -190,14 +204,17 @@ def validate_mat(file_path):
             error_messages.append(error_message)
             # a 초기화
         a = float(data[4]) 
-        b = data[0]  
+        b = data[0]          
+    else :
+        error_message = (
+            f'데이터 형식이 잘못되었습니다'
+        )
+        error_messages.append(error_message)      
     # 사용 불가 단어 검증 로직 #
     check_invalid_words(all_tables1)
-    check_invalid_words(all_tables)   
-    # for error in error_messages:
-    #     print(error)
+    check_invalid_words(all_tables)
+
     all_tables.append(all_tables1)
-    # for row in all_tables1:
-    #     all_tables.append(all_tables1)
+
     
     return result_tables, error_messages
