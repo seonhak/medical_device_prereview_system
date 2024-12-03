@@ -98,28 +98,26 @@ size_result = all_tables[2]
 #     print("\n모든 테이블이 검증을 통과했습니다.")
 
 
-a = ''
-print("테이블 검증 ===========================")
-for table in all_tables:
-    if table != None and type(table) == list:
-        for row in table:
-            if row != None:
-                print(row)
-                # a = a + row
+# # a = ''
+# print("테이블 검증 ===========================")
+# for table in all_tables:
+#     if table != None and type(table) == list:
+#         for row in table:
+#             if row != None:
+#                 print(row)
+#                 # a = a + row
                 
-    else:
-        print(table)
+#     else:
+#         print(table)
+        
 # save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\report.hwp", error_messages)
 
 
-
-# print("에러메시지 검증 ===========================")
+error_result = []
+print("에러메시지 검증 ===========================")
 for errors in error_messages:
     if errors != None and type(errors) == list:
         for row in errors:
             if row != None:
-                print(type(row))
-    else:
-        print(errors)
-
-# save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\report.hwp", a)
+                error_result.append(row)
+save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\report.hwp", error_result)

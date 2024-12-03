@@ -51,7 +51,7 @@ def check_invalid_words(data_list):
                 continue
             for invalid_word in forbidden_words:
                 if invalid_word in row:  # 문자열 비교
-                    error_messages.append((row, invalid_word))
+                    error_messages.append((row + ' / 금지단어 : ' + invalid_word))
                     continue  # 하나의 단어만 일치해도 중단
 
 def preprocess_row(row):
@@ -106,11 +106,10 @@ def clean_and_filter_list(data):
         cleaned_item = re.sub(r'\s+', '',str(item))  # 공백 제거
         if cleaned_item:  # 비어 있지 않은 값만 추가
             cleaned_list.append(cleaned_item)
-
     return cleaned_list
 
 def validate_mat(file_path):
-    
+    result_tables = []
     all_tables = []
     all_tables1= []
 
@@ -122,6 +121,13 @@ def validate_mat(file_path):
                 if first_row == fixed_header :
                     for table_data in table[1:]:
                         a = clean_and_filter_list(table_data)
+                        
+                        
+                        temp = ' '
+                        for r in a :
+                            temp = temp + r
+                        result_tables.append(temp)
+                        
                         if ( len(a) > 0 and
                             a[0] is not None and str(a[0]).isdigit() and
                             a[4] is not None and str(a[4]).isdigit()
@@ -194,4 +200,4 @@ def validate_mat(file_path):
     # for row in all_tables1:
     #     all_tables.append(all_tables1)
     
-    return all_tables, error_messages
+    return result_tables, error_messages

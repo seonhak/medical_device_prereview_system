@@ -39,7 +39,7 @@ def validate_dict_data(dict_data, forbidden_words):
         else:
             for word in forbidden_words:
                 if word in item['명칭']:
-                    row_errors.append(f"'명칭'에 금지 단어 '{word}' 포함")
+                    row_errors.append(f"'명칭'에 금지 단어 {word} 포함")
 
         # "기능 및 역할" 검증
         if not item['기능 및 역할']:
@@ -47,10 +47,12 @@ def validate_dict_data(dict_data, forbidden_words):
         else:
             for word in forbidden_words:
                 if word in item['기능 및 역할']:
-                    row_errors.append(f"'기능 및 역할'에 금지 단어 '{word}' 포함")
+                    row_errors.append(f"'기능 및 역할'에 금지 단어 {word} 포함")
 
         if row_errors:
-            error_messages.append({"row": idx, "errors": row_errors})
+            # error_messages.append("row : {idx}, errors : {row_errors}")
+            for row in row_errors :
+                error_messages.append(row)
     return error_messages
 
 def validate_shape(file_path):

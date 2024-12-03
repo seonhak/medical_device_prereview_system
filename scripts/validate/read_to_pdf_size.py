@@ -56,7 +56,7 @@ def validate_dict_data(dict_data, forbidden_words):
         else:
             for word in forbidden_words:
                 if word in item['명칭']:
-                    row_errors.append(f"'명칭'에 금지 단어 '{word}' 포함")
+                    row_errors.append(f"'명칭'에 금지 단어 {word} 포함")
 
         # "치수" 검증 - 숫자여야 하며 부등호 포함 불가
         if not item['치수'].replace('.', '', 1).isdigit() or '>' in item['치수'] or '<' in item['치수']:
