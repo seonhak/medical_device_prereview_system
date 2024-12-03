@@ -1,8 +1,10 @@
 import os
 import re
 import pdfplumber 
-from required_wp import *
+from required_pfu import *
 from forbidden_words import *
+# 사용 시 주의사항
+
 # 정규화 함수 확장
 def normalize_text(text):
     """
@@ -43,7 +45,7 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
         print("문제 없음. 모든 조건을 만족합니다.")
 
 #############################################################
-#스타킹#
+# 스타킹 #
 def read_pdf_with_pdfplumber_stockings1(pdf_file_path):
     try:
         full_text = ""  # 전체 PDF 텍스트를 저장할 변수
@@ -66,8 +68,9 @@ def read_pdf_with_pdfplumber_stockings1(pdf_file_path):
         print(f"Error reading PDF: {e}")
 
 #################################################
-#벨트#
+
 def read_pdf_with_pdfplumber_belt1(pdf_file_path):
+#벨트#
     try:
         full_text = ""  # 전체 PDF 텍스트를 저장할 변수
         with pdfplumber.open(pdf_file_path) as pdf:
@@ -89,7 +92,7 @@ def read_pdf_with_pdfplumber_belt1(pdf_file_path):
         print(f"Error reading PDF: {e}")
 
 #############################################################
-#자기점착형밴드#
+#자기점착형#
 def read_pdf_with_pdfplumber_self_adhesive_bandage1(pdf_file_path):
     try:
         full_text = ""  # 전체 PDF 텍스트를 저장할 변수
@@ -112,8 +115,3 @@ def read_pdf_with_pdfplumber_self_adhesive_bandage1(pdf_file_path):
         print(f"Error reading PDF: {e}")
 
 #################################################
-
-# pdf_file_path = r"C:\Users\USER\Desktop\박창선업무\2024-11-27\압박용밴드 형태별 의료기기 표준서식_test\압박용밴드 형태별 의료기기 표준서식\압박용밴드_스타킹형태 서식\사용방법 (3).pdf"
-# pdf_file_path1 = r"C:\Users\USER\Desktop\박창선업무\2024-11-27\압박용밴드 형태별 의료기기 표준서식_test\압박용밴드 형태별 의료기기 표준서식\압박용밴드_스타킹형태 서식\모양및구조-작용원리_스타킹.pdf"
-# #read_pdf_with_pdfplumber_belt(pdf_file_path)
-# read_pdf_with_pdfplumber_stockings1(pdf_file_path1)

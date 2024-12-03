@@ -1,6 +1,7 @@
 import pdfplumber
 from forbidden_words import forbidden_words  # 금지 단어 리스트
 from save_error_to_txt import save_error_to_file  # 에러 저장 함수
+# 치수
 
 fixed_header = ['번호', '명칭', '치수']
 
@@ -65,7 +66,7 @@ def validate_dict_data(dict_data, forbidden_words):
             errors.append({"row": idx, "errors": row_errors})
     return errors
 
-def validate_pdf_with_fixed_header(file_path, fixed_header, forbidden_words):
+def validate_size(file_path):
     """PDF 파일을 읽고 고정 헤더와 비교하며, 고정 헤더 불일치 시 검증을 중단."""
     all_tables = []
     error_messages = []

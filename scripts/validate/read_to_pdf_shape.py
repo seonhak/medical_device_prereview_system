@@ -1,6 +1,7 @@
 import pdfplumber
 from forbidden_words import forbidden_words  # 금지 단어 리스트
 from save_error_to_txt import save_error_to_file  # 에러 저장 함수
+# 외형
 
 fixed_header = ['번호', '명칭', '기능 및 역할']
 
@@ -52,7 +53,7 @@ def validate_dict_data(dict_data, forbidden_words):
             errors.append({"row": idx, "errors": row_errors})
     return errors
 
-def validate_pdf_with_dict(file_path, fixed_header, forbidden_words):
+def validate_shape(file_path):
     """PDF 파일을 읽고 딕셔너리를 기반으로 검증."""
     all_tables = []
     error_messages = []

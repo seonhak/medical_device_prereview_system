@@ -1,9 +1,9 @@
 import os
 import re
 import pdfplumber 
-from required_pfu import *
+from required_usage import *
 from forbidden_words import *
-
+# 사용방법
 
 # 정규화 함수 확장
 def normalize_text(text):
@@ -45,8 +45,8 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
         print("문제 없음. 모든 조건을 만족합니다.")
 
 #############################################################
-# 스타킹 #
-def read_pdf_with_pdfplumber_stockings1(pdf_file_path):
+# 스타킹 사용방법 읽기
+def validate_usage_stockings1(pdf_file_path):
     try:
         full_text = ""  # 전체 PDF 텍스트를 저장할 변수
         with pdfplumber.open(pdf_file_path) as pdf:
@@ -68,9 +68,8 @@ def read_pdf_with_pdfplumber_stockings1(pdf_file_path):
         print(f"Error reading PDF: {e}")
 
 #################################################
-
-def read_pdf_with_pdfplumber_belt1(pdf_file_path):
-#벨트#
+#벨트 사용 방법 읽기
+def validate_usage_belt1(pdf_file_path):
     try:
         full_text = ""  # 전체 PDF 텍스트를 저장할 변수
         with pdfplumber.open(pdf_file_path) as pdf:
@@ -92,8 +91,8 @@ def read_pdf_with_pdfplumber_belt1(pdf_file_path):
         print(f"Error reading PDF: {e}")
 
 #############################################################
-#자기점착형#
-def read_pdf_with_pdfplumber_self_adhesive_bandage1(pdf_file_path):
+#자기점착형밴드 사용방법 읽기
+def validate_usage_self_adhesive_bandage1(pdf_file_path):
     try:
         full_text = ""  # 전체 PDF 텍스트를 저장할 변수
         with pdfplumber.open(pdf_file_path) as pdf:

@@ -2,7 +2,9 @@ import os
 import re
 import pdfplumber
 from forbidden_words import *
-# from save_error_to_txt import *
+from save_error_to_txt import *
+# 원재료
+
 fixed_header = ['일련번호', '부분품의명칭', '원재료명또는성분명', '규격', '분량', '비고(인체접촉여부및접촉부위첨가목적)']
     # return 들어갈 자리
 fixed_items = [
@@ -190,3 +192,5 @@ def process_pdf(file_path):
     check_invalid_words(all_tables)   
     for error in error_messages:
         print(error)
+        
+    return all_tables, error_messages
