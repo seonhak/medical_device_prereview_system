@@ -29,37 +29,49 @@ def validate_all_docs(folder_path, code):
             print('외형 검증 ==============================')
             shape_table, shape_error = validate_shape(shape_file[0])
             all_tables.append(shape_table)
-            error_messages.append(shape_error)
+            if(type(shape_error) != type(None)):
+                error_messages.append(f"외형파일에 문제가 있습니다. 오류 검출 개수 : {len(shape_error)}")
+                error_messages.append(shape_error)
         elif keyword == '작용원리':
             wp_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('작용원리 검증 ==============================')
             wp_table, wp_error = validate_wp(wp_file[0], code)
             all_tables.append(wp_table)
-            error_messages.append(wp_error)   
+            if(type(wp_error) != type(None)):
+                error_messages.append(f"작용원리파일에 문제가 있습니다. 오류 검출 개수 : {len(wp_error)}")
+                error_messages.append(wp_error)   
         elif keyword == '치수':
             size_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('치수 검증 ==============================')
             size_table, size_error = validate_size(size_file[0])
             all_tables.append(size_table)
-            error_messages.append(size_error)
+            if(type(size_error) != type(None)):
+                error_messages.append(f"치수파일에 문제가 있습니다. 오류 검출 개수 : {len(size_error)}")
+                error_messages.append(size_error)
         elif keyword == '원재료':
             mat_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('원재료 검증 ==============================')
             mat_table, mat_error = validate_mat(mat_file[0])
             all_tables.append(mat_table)
-            error_messages.append(mat_error)
+            if(type(mat_error) != type(None)):
+                error_messages.append(f"원재료파일에 문제가 있습니다. 오류 검출 개수 : {len(mat_error)}")
+                error_messages.append(mat_error)
         elif keyword == '사용방법':
             usage_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('사용방법 검증 ==============================')
             usage_table, usage_error = validate_usage(usage_file[0], code)
             all_tables.append(usage_table)
-            error_messages.append(usage_error)
+            if(type(usage_error) != type(None)):
+                error_messages.append(f"사용방법파일에 문제가 있습니다. 오류 검출 개수 : {len(usage_error)}")
+                error_messages.append(usage_error)
         elif keyword == '주의사항':
             pfu_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('주의사항 검증 ==============================')
             pfu_table, pfu_error = validate_pfu(pfu_file[0], code)
             all_tables.append(pfu_table)
-            error_messages.append(pfu_error)
+            if(type(pfu_error) != type(None)):
+                error_messages.append(f"주의사항파일에 문제가 있습니다. 오류 검출 개수 : {len(pfu_error)}")
+                error_messages.append(pfu_error)
         else:
             print()
     
@@ -108,22 +120,22 @@ for errors in error_messages:
         for row in errors:
             if row != None:
                 error_result.append(row)
-    else: error_result.append(row)
+    else: error_result.append(errors)
 save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\report.hwp", error_result)
 
 
 
-kobert_result = []
-print("AI 검증 ===========================")
-for table in all_tables[:10]:
-    if table != None and type(table) == list:
-        for row in table:
-            if row != None and type(row) == str:
-                kobert_result.append(predict_label(row))
-    else:
-        if table != None and type(table) == str:
-                kobert_result.append(predict_label(table))
+# kobert_result = []
+# print("AI 검증 ===========================")
+# for table in all_tables[:2]:
+#     if table != None and type(table) == list:
+#         for row in table:
+#             if row != None and type(row) == str:
+#                 kobert_result.append(predict_label(row))
+#     else:
+#         if table != None and type(table) == str:
+#                 kobert_result.append(predict_label(table))
         
-print(kobert_result)
-save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\kobert_report.hwp", kobert_result)
+# print(kobert_result)
+# save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\kobert_report.hwp", kobert_result)
 
