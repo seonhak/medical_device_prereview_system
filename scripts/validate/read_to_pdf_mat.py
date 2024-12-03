@@ -188,10 +188,10 @@ def validate_mat(file_path):
     # 사용 불가 단어 검증 로직 #
     check_invalid_words(all_tables1)
     check_invalid_words(all_tables)   
-    for error in error_messages:
-        print(error)
-        
-    for row in all_tables1:
-        all_tables.append(all_tables1)
+    # for error in error_messages:
+    #     print(error)
+    all_tables.append(all_tables1)
+    # for row in all_tables1:
+    #     all_tables.append(all_tables1)
     
     return all_tables, error_messages

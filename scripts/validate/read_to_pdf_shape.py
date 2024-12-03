@@ -60,7 +60,7 @@ def validate_shape(file_path):
     
     with pdfplumber.open(file_path) as pdf:
         for page_number, page in enumerate(pdf.pages, start=1):
-            print(f"페이지 {page_number} 처리 중...")
+            # print(f"페이지 {page_number} 처리 중...")
             page_tables = page.extract_tables()
             if not page_tables:
                 continue
@@ -89,14 +89,10 @@ def validate_shape(file_path):
                 errors = validate_dict_data(dict_data, forbidden_words)
                 if errors:
                     for error in errors:
-                        error_messages.append(f"페이지 {page_number}, 행 {error['row']}: {', '.join(error['errors'])}")
-
-    # 결과 저장
-    if error_messages:
-        save_error_to_file("\n".join(error_messages), file_path)
-        for msg in error_messages:
-            print(msg)
-    else:
-        print("\n모든 테이블이 검증을 통과했습니다.")
+                        error_messages.append(error)
+                
     return all_tables, error_messages
+
+
+
 

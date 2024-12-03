@@ -19,11 +19,11 @@ def table_to_dict(table):
     dict_list = []
     for row_idx, row in enumerate(table[1:], start=2):  # 첫 행은 헤더이므로 제외
         # 데이터 디버깅
-        print(f"페이지 테이블 행 {row_idx}: {row}")
+        # print(f"페이지 테이블 행 {row_idx}: {row}")
         
         # 빈 행 건너뜀
         if all(cell.strip() == "" for cell in row):
-            print(f"빈 행 건너뜀: {row}")
+            # print(f"빈 행 건너뜀: {row}")
             continue
         
         # 줄바꿈 제거 및 데이터 클리닝
@@ -32,7 +32,7 @@ def table_to_dict(table):
         # 누락된 열은 빈 문자열로 보완
         row = row + [''] * (len(keys) - len(row))
         if len(row) < len(keys):  # 예상보다 짧은 경우 무시
-            print(f"행 {row_idx}가 예상 키 길이에 맞지 않음: {row}")
+            # print(f"행 {row_idx}가 예상 키 길이에 맞지 않음: {row}")
             continue
         
         # 딕셔너리 변환
@@ -79,7 +79,7 @@ def validate_size(file_path):
             if validation_stopped:
                 break  # 검증 중단 시 남은 페이지 무시
 
-            print(f"페이지 {page_number} 처리 중...")
+            # print(f"페이지 {page_number} 처리 중...")
             page_tables = page.extract_tables()
             if not page_tables:
                 continue
@@ -117,14 +117,4 @@ def validate_size(file_path):
                         error_messages.append(
                             f"페이지 {page_number}, 테이블 {table_idx}, 행 {error['row']}: {', '.join(error['errors'])}"
                         )
-
-    # 결과 저장
-    if error_messages:
-        save_error_to_file("\n".join(error_messages), file_path)
-        print("\n[검증 실패]")
-        for msg in error_messages:
-            print(msg)
-    else:
-        print("\n모든 테이블이 검증을 통과했습니다.")
-
     return all_tables, error_messages

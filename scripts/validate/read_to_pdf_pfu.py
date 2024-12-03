@@ -3,6 +3,7 @@ import re
 import pdfplumber 
 from .required_pfu import *
 from .forbidden_words import *
+from .save_error_to_txt import save_error_to_file  # 에러 저장 함수
 # 사용 시 주의사항
 
 # 정규화 함수 확장
@@ -36,18 +37,19 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
             normalized_word = normalize_text(word_pattern)  # 금지 단어 정규화
             if re.search(normalized_word, normalized_line):
                 error_messages.append(f"문제: 금지 단어 '{word_pattern}'가 {line_number}번째 줄에 발견되었습니다.")
-    # 결과 출력
-    if error_messages:
-        print("다음과 같은 문제가 발견되었습니다:")
-        for error in error_messages:
-            print(error)
-    else:
-        print("문제 없음. 모든 조건을 만족합니다.")
+    # # 결과 출력
+    # if error_messages:
+    #     print("다음과 같은 문제가 발견되었습니다:")
+    #     for error in error_messages:
+    #         print(error)
+    # else:
+    #     print("문제 없음. 모든 조건을 만족합니다.")
+    #     # 결과 저장
+    
 
 #############################################################
 # 스타킹 #
 def validate_pfu_stockings1(pdf_file_path):
-    error_messages = []
     try:
         full_text = ""  # 전체 PDF 텍스트를 저장할 변수
         with pdfplumber.open(pdf_file_path) as pdf:
@@ -58,23 +60,17 @@ def validate_pfu_stockings1(pdf_file_path):
                     full_text += text + "\n"  # 페이지 구분을 위해 줄바꿈 추가
 
         # 전체 텍스트를 한 번에 처리
-        print("\n--- Processing Entire PDF ---\n")
-        error_messages = process_data_with_normalization(full_text, required_phrases_stockings, forbidden_words)
-        
-        # 전체 텍스트 출력 (선택 사항)
-        print("\n--- Full Extracted Text ---\n")
-        print(full_text)
+        error_messages = process_data_with_normalization(full_text, required_phrases_self_adhesive_bandage, forbidden_words)
         
     except Exception as e:
         print(f"Error reading PDF: {e}")
         error_messages.append(e)
     finally:
-        return error_messages
+        return full_text, error_messages
 
 #################################################
 
 def validate_pfu_belt1(pdf_file_path):
-    error_messages = []
 #벨트#
     try:
         full_text = ""  # 전체 PDF 텍스트를 저장할 변수
@@ -86,23 +82,17 @@ def validate_pfu_belt1(pdf_file_path):
                     full_text += text + "\n"  # 페이지 구분을 위해 줄바꿈 추가
 
         # 전체 텍스트를 한 번에 처리
-        print("\n--- Processing Entire PDF ---\n")
         error_messages = process_data_with_normalization(full_text, required_phrases_belt, forbidden_words)
-        
-        # 전체 텍스트 출력 (선택 사항)
-        print("\n--- Full Extracted Text ---\n")
-        print(full_text)
         
     except Exception as e:
         print(f"Error reading PDF: {e}")
         error_messages.append(e)
     finally:
-        return error_messages
+        return full_text, error_messages
 
 #############################################################
 #자기점착형#
 def validate_pfu_self_adhesive_bandage1(pdf_file_path):
-    error_messages = []
     try:
         full_text = ""  # 전체 PDF 텍스트를 저장할 변수
         with pdfplumber.open(pdf_file_path) as pdf:
@@ -111,20 +101,13 @@ def validate_pfu_self_adhesive_bandage1(pdf_file_path):
                 text = page.extract_text()
                 if text:
                     full_text += text + "\n"  # 페이지 구분을 위해 줄바꿈 추가
-
-        # 전체 텍스트를 한 번에 처리
-        print("\n--- Processing Entire PDF ---\n")
-        error_messages = process_data_with_normalization(full_text, required_phrases_self_adhesive_bandage, forbidden_words)
-        
-        # 전체 텍스트 출력 (선택 사항)
-        print("\n--- Full Extracted Text ---\n")
-        print(full_text)
+        error_messages = process_data_with_normalization(full_text, required_phrases_belt, forbidden_words)
         
     except Exception as e:
         print(f"Error reading PDF: {e}")
         error_messages.append(e)
     finally:
-        return error_messages
+        return full_text, error_messages
 
 #################################################
 

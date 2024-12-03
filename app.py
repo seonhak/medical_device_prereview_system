@@ -1,5 +1,6 @@
 
 from scripts.models.predict_label import predict_label
+from scripts.validate.write_hwp_report import *
 from scripts.validate.read_to_pdf_mat import *
 from scripts.validate.read_to_pdf_pfu import *
 from scripts.validate.read_to_pdf_shape import *
@@ -32,7 +33,8 @@ def validate_all_docs(folder_path, code):
         elif keyword == '작용원리':
             wp_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('작용원리 검증 ==============================')
-            wp_error = validate_wp(wp_file[0], code)
+            wp_table, wp_error = validate_wp(wp_file[0], code)
+            all_tables.append(wp_table)
             error_messages.append(wp_error)   
         elif keyword == '치수':
             size_file = find_pdf_files_with_keyword(folder_path, keyword)
@@ -49,12 +51,14 @@ def validate_all_docs(folder_path, code):
         elif keyword == '사용방법':
             usage_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('사용방법 검증 ==============================')
-            usage_error = validate_usage(usage_file[0], code)
+            usage_table, usage_error = validate_usage(usage_file[0], code)
+            all_tables.append(usage_table)
             error_messages.append(usage_error)
         elif keyword == '주의사항':
             pfu_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('주의사항 검증 ==============================')
-            pfu_error = validate_pfu(pfu_file[0], code)
+            pfu_table, pfu_error = validate_pfu(pfu_file[0], code)
+            all_tables.append(pfu_table)
             error_messages.append(pfu_error)
         else:
             print()
@@ -84,7 +88,38 @@ size_result = all_tables[2]
 # 4:원재료 / 5:사용목적 / 6:사용방법 / 7:사용 시 주의사항
 
 # write_hwp_report(output_path, error_messages)
-# print(error_messages)
-print("에러로그 출력===============================")
-for error in error_messages:
-    print(error)
+
+# # 결과 저장
+# if error_messages:
+#     save_error_to_file("\n".join(error_messages), './test_folder')
+#     for msg in error_messages:
+#         print(msg)
+# else:
+#     print("\n모든 테이블이 검증을 통과했습니다.")
+
+
+a = ''
+print("테이블 검증 ===========================")
+for table in all_tables:
+    if table != None and type(table) == list:
+        for row in table:
+            if row != None:
+                print(row)
+                # a = a + row
+                
+    else:
+        print(table)
+# save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\report.hwp", error_messages)
+
+
+
+# print("에러메시지 검증 ===========================")
+for errors in error_messages:
+    if errors != None and type(errors) == list:
+        for row in errors:
+            if row != None:
+                print(type(row))
+    else:
+        print(errors)
+
+# save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\report.hwp", a)
