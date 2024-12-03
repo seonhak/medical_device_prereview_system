@@ -16,3 +16,4 @@ def predict_label(input_text):
     # print(inputs)
     predicted_label = predict(input_text, tokenizer, model, device)
     print(f"Predicted Label about {input_text} : {predicted_label}")
+    return f"Predicted Label about {input_text} : {predicted_label}"

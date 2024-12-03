@@ -99,18 +99,6 @@ size_result = all_tables[2]
 
 
 # # a = ''
-# print("테이블 검증 ===========================")
-# for table in all_tables:
-#     if table != None and type(table) == list:
-#         for row in table:
-#             if row != None:
-#                 print(row)
-#                 # a = a + row
-                
-#     else:
-#         print(table)
-        
-# save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\report.hwp", error_messages)
 
 
 error_result = []
@@ -120,4 +108,22 @@ for errors in error_messages:
         for row in errors:
             if row != None:
                 error_result.append(row)
+    else: error_result.append(row)
 save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\report.hwp", error_result)
+
+
+
+kobert_result = []
+print("AI 검증 ===========================")
+for table in all_tables[:10]:
+    if table != None and type(table) == list:
+        for row in table:
+            if row != None and type(row) == str:
+                kobert_result.append(predict_label(row))
+    else:
+        if table != None and type(table) == str:
+                kobert_result.append(predict_label(table))
+        
+print(kobert_result)
+save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\kobert_report.hwp", kobert_result)
+

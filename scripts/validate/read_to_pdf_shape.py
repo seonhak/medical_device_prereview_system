@@ -85,8 +85,14 @@ def validate_shape(file_path):
 
                 # 딕셔너리 변환
                 dict_data = table_to_dict(table)
-                all_tables.extend(dict_data)
-
+                
+                for row in table :
+                    add_row = ''
+                    for a in row :
+                        a = clean_text(a)
+                        add_row = add_row + ' ' + a
+                    all_tables.append(add_row)
+                
                 # 데이터 검증
                 errors = validate_dict_data(dict_data, forbidden_words)
                 if errors:
