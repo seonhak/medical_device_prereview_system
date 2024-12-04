@@ -56,10 +56,10 @@ def validate_wp_stockings1(pdf_file_path):
                 text = page.extract_text()
                 if text:
                     full_text += text + "\n"  # 페이지 구분을 위해 줄바꿈 추가
-
+        
         # 전체 텍스트를 한 번에 처리
         error_messages = process_data_with_normalization(full_text, required_phrases_stockings, forbidden_words)
-        
+        full_text = full_text.rstrip("\n")
     except Exception as e:
         print(f"Error reading PDF: {e}")
     finally:
@@ -79,8 +79,8 @@ def validate_wp_belt1(pdf_file_path):
 
         # 전체 텍스트를 한 번에 처리
         error_messages = process_data_with_normalization(full_text, required_phrases_stockings, forbidden_words)
+        full_text = full_text.rstrip("\n")
 
-        
     except Exception as e:
         print(f"Error reading PDF: {e}")
     finally:
@@ -100,6 +100,7 @@ def validate_wp_self_adhesive_bandage1(pdf_file_path):
 
         # 전체 텍스트를 한 번에 처리
         error_messages = process_data_with_normalization(full_text, required_phrases_stockings, forbidden_words)
+        full_text = full_text.rstrip("\n")
 
         
     except Exception as e:

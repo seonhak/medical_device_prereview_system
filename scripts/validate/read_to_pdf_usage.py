@@ -58,6 +58,7 @@ def validate_usage_stockings1(pdf_file_path):
 
         # 전체 텍스트를 한 번에 처리
         error_messages = process_data_with_normalization(full_text, required_phrases_self_adhesive_bandage, forbidden_words)
+        full_text = full_text.rstrip("\n")
         
     except Exception as e:
         print(f"Error reading PDF: {e}")
@@ -78,6 +79,7 @@ def validate_usage_belt1(pdf_file_path):
 
         # 전체 텍스트를 한 번에 처리
         error_messages = process_data_with_normalization(full_text, required_phrases_self_adhesive_bandage, forbidden_words)
+        full_text = full_text.rstrip("\n")
         
     except Exception as e:
         print(f"Error reading PDF: {e}")
@@ -98,6 +100,7 @@ def validate_usage_self_adhesive_bandage1(pdf_file_path):
 
         # 전체 텍스트를 한 번에 처리
         error_messages = process_data_with_normalization(full_text, required_phrases_self_adhesive_bandage, forbidden_words)
+        full_text = full_text.rstrip("\n")
         
     except Exception as e:
         print(f"Error reading PDF: {e}")

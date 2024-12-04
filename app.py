@@ -9,6 +9,9 @@ from scripts.validate.read_to_pdf_usage import *
 from scripts.validate.read_to_pdf_wp import *
 from scripts.validate.read_pdf_file_with_keyword import *
 
+def clean_text(text):
+    """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
+    return text.replace('\n', '').replace(' ', '').strip() if isinstance(text, str) else ""
 
 def validate_all_docs(folder_path, code):
     # 실제로는 서류 파일을 입력받아 사용해야할 데이터 형식에 맞게 전처리 후 함수 호출 필요
@@ -113,28 +116,30 @@ size_result = all_tables[2]
 # # a = ''
 
 
-error_result = []
-print("에러메시지 검증 ===========================")
-for errors in error_messages:
-    if errors != None and type(errors) == list:
-        for row in errors:
-            if row != None:
-                error_result.append(row)
-    else: error_result.append(errors)
-save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\report.hwp", error_result)
+# error_result = []
+# print("에러메시지 검증 ===========================")
+# for errors in error_messages:
+#     if errors != None and type(errors) == list:
+#         for row in errors:
+#             if row != None:
+#                 error_result.append(row)
+#     else: error_result.append(errors)
+# save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\report.hwp", error_result)
 
 
-
-# kobert_result = []
-# print("AI 검증 ===========================")
-# for table in all_tables[:2]:
-#     if table != None and type(table) == list:
-#         for row in table:
-#             if row != None and type(row) == str:
-#                 kobert_result.append(predict_label(row))
-#     else:
-#         if table != None and type(table) == str:
-#                 kobert_result.append(predict_label(table))
+kobert_input = []
+kobert_result = []
+print("AI 검증 ===========================")
+for table in all_tables:
+    if table != None and type(table) == list:
+        for row in table:
+            if row != None and type(row) == str and not clean_text(row) == '':
+                # kobert_result.append(predict_label(row))
+                print(row)
+    else:
+        if table != None and type(table) == str and not clean_text(table) == '':
+                # kobert_result.append(predict_label(table))
+                print(table)
         
 # print(kobert_result)
 # save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\kobert_report.hwp", kobert_result)

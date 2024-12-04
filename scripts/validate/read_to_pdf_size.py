@@ -4,7 +4,7 @@ from .save_error_to_txt import save_error_to_file  # 에러 저장 함수
 # 치수
 
 fixed_header = ['번호', '명칭', '치수']
-
+fixed_header_str = '번호명칭치수'
 def clean_text(text):
     """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
     return text.replace('\n', '').replace(' ', '').strip() if isinstance(text, str) else ""
@@ -114,7 +114,8 @@ def validate_size(file_path):
                     for a in row :
                         a = clean_text(a)
                         add_row = add_row + ' ' + a
-                    all_tables.append(add_row)
+                    if not clean_text(add_row) == '' and not clean_text(add_row) == clean_text(fixed_header_str):
+                        all_tables.append(add_row)
                     
                 # 데이터 검증
                 errors = validate_dict_data(dict_data, forbidden_words)

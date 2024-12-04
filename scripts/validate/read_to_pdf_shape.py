@@ -4,6 +4,7 @@ from .save_error_to_txt import save_error_to_file  # 에러 저장 함수
 # 외형
 
 fixed_header = ['번호', '명칭', '기능 및 역할']
+fixed_header_str = '번호명칭기능및역할'
 
 def clean_text(text):
     """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
@@ -91,7 +92,10 @@ def validate_shape(file_path):
                     for a in row :
                         a = clean_text(a)
                         add_row = add_row + ' ' + a
-                    all_tables.append(add_row)
+                    
+                    if not clean_text(add_row) == '' and not clean_text(add_row) == clean_text(fixed_header_str) and not contains_exterior_info:
+                        all_tables.append(add_row)
+                    # all_tables.append(clean_text(add_row))
                 
                 # 데이터 검증
                 errors = validate_dict_data(dict_data, forbidden_words)

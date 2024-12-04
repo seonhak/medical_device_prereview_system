@@ -39,6 +39,10 @@ valid_keywords4 =[
     "제품번호또는모델명"
 ]
 
+def clean_text(text):
+    """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
+    return text.replace('\n', '').replace(' ', '').strip() if isinstance(text, str) else ""
+
 def check_invalid_words(data_list):
     """
     데이터 리스트에서 사용 불가 단어를 확인합니다.
@@ -129,12 +133,21 @@ def validate_mat(file_path):
                     )
                 # if first_row == fixed_header :
                 for table_data in table[1:]:
-                    print(table_data)
+                    # print(table_data)
                     a = clean_and_filter_list(table_data)
-                    temp = ' '
+                    temp = ''
                     for r in a :
-                        temp = temp + r
+                        in_fixed_items = False
+                        for fixed_item_list in fixed_items :
+                            for fixed_item in fixed_item_list :
+                                if clean_text(r) == clean_text(fixed_item):
+                                    in_fixed_items = True
+                        if not in_fixed_items: 
+                            temp = temp + r
                     result_tables.append(temp)
+                    
+                    
+                    
                     if ( len(a) > 0 and
                         a[0] is not None and str(a[0]).isdigit() and
                         a[4] is not None and str(a[4]).isdigit()
@@ -152,9 +165,9 @@ def validate_mat(file_path):
                     elif len(a) > 0 and a[0] in valid_keywords:
                         all_tables1.append(a)
                     elif len(a) > 0 and table_data[0] == None or table_data[0] =='':
-                        print(type(a))
+                        
                         for data_row in a:
-                            print(data_row)
+                            # print(data_row)
                             if data_row in valid_keywords2:
                                 a.insert(0,'원재료공통기재사항')
                                 all_tables1.append(a)
