@@ -15,5 +15,5 @@ def predict_label(input_text):
     inputs = preprocess_input(input_text, tokenizer)
     # print(inputs)
     predicted_label = predict(input_text, tokenizer, model, device)
-    print(f"Predicted Label about {input_text} : {predicted_label}")
-    return f"Predicted Label about {input_text} : {predicted_label}"
+    print(f"입력문장 : {input_text} \r\n  - 예측 클래스 : {predicted_label}")
+    return f"입력문장 : {input_text} \r\n  - 예측 클래스 : {predicted_label}"

@@ -16,13 +16,6 @@ def clean_text(text):
 def validate_all_docs(folder_path, code):
     # 실제로는 서류 파일을 입력받아 사용해야할 데이터 형식에 맞게 전처리 후 함수 호출 필요
     # 서버 프로젝트 의존성에 파이썬 관련 패키지 추가 필요
-    
-    # mat file : docs에서 mat에 해당하는 파일
-    # validate_mat("mat file")
-    # shape file : docs에서 shape에 해당하는 파일
-    # validate_shape("shape file")
-    # size file : docs에서 size에 해당하는 파일
-    # validate_size("size file")
     keywords = ['외형', '작용원리', '치수', '원재료', '사용방법', '주의사항']
     error_messages = []
     all_tables = []
@@ -85,46 +78,21 @@ def validate_all_docs(folder_path, code):
 # 결과 변수를 직접 받는게 아니라, 결과를 출력하면 ProcessBuilder로 출력한 결과를 읽어오는 방식
 all_tables, error_messages = validate_all_docs(f'./test_folder', 1)
 
-mat_result = all_tables[0]
-shape_result = all_tables[1]
-size_result = all_tables[2]
-
-# print(mat_result)
-# print(shape_result)
-# print(size_result)
-
-# 입력 문장에 대해 예측한 라벨을 출력하는 함수
-# 입력 문장이 단순 string이 아닌 list나 dict형태가 될 경우 그에 맞게 predict_label 함수를 변경해줘야함
-# predict_label(mat_result)
-# predict_label(shape_result)
-# predict_label(size_result)
-
 # 0:접수처리 / 1:모양 및 구조 - 작용원리 / 2:모양 및 구조 - 외형 / 3:모양 및 구조 - 치수
 # 4:원재료 / 5:사용목적 / 6:사용방법 / 7:사용 시 주의사항
 
 # write_hwp_report(output_path, error_messages)
 
-# # 결과 저장
-# if error_messages:
-#     save_error_to_file("\n".join(error_messages), './test_folder')
-#     for msg in error_messages:
-#         print(msg)
-# else:
-#     print("\n모든 테이블이 검증을 통과했습니다.")
 
-
-# # a = ''
-
-
-# error_result = []
-# print("에러메시지 검증 ===========================")
-# for errors in error_messages:
-#     if errors != None and type(errors) == list:
-#         for row in errors:
-#             if row != None:
-#                 error_result.append(row)
-#     else: error_result.append(errors)
-# save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\report.hwp", error_result)
+error_result = []
+print("에러메시지 검증 ===========================")
+for errors in error_messages:
+    if errors != None and type(errors) == list:
+        for row in errors:
+            if row != None:
+                error_result.append(row)
+    else: error_result.append(errors)
+save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\report.hwp", error_result)
 
 
 kobert_input = []
@@ -134,13 +102,13 @@ for table in all_tables:
     if table != None and type(table) == list:
         for row in table:
             if row != None and type(row) == str and not clean_text(row) == '':
-                # kobert_result.append(predict_label(row))
-                print(row)
+                kobert_result.append(predict_label(row))
+                # print(row)
     else:
         if table != None and type(table) == str and not clean_text(table) == '':
-                # kobert_result.append(predict_label(table))
-                print(table)
+                kobert_result.append(predict_label(table))
+                # print(table)
         
 # print(kobert_result)
-# save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\kobert_report.hwp", kobert_result)
+save_list_to_hwp(r"C:\Users\USER\Desktop\식약처\medical_device_prereview_system\test_folder\kobert_report.hwp", kobert_result)
 
