@@ -12,7 +12,7 @@ def save_list_to_hwp(output_path, content_list):
     for content in content_list:
         hwp.Run("MoveDocEnd")  # 문서 끝으로 이동
         hwp.HAction.GetDefault("InsertText", hwp.HParameterSet.HInsertText.HSet)
-        hwp.HParameterSet.HInsertText.Text = content + '\r\n'
+        hwp.HParameterSet.HInsertText.Text = '\r\n'+content + '\r\n'
         hwp.HAction.Execute("InsertText", hwp.HParameterSet.HInsertText.HSet)
         
 

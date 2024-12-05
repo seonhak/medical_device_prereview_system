@@ -26,7 +26,10 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
     for phrase_pattern in required_phrases:
         normalized_phrase = normalize_text(phrase_pattern)  # 필수 문장 정규화
         if normalized_phrase not in normalized_data:
-            error_messages.append(f"문제: 필수 문장 {phrase_pattern}가 데이터 전체에 포함되지 않았습니다.")
+            error_messages.append(
+                f'----필수 문장이 포함되지 않았습니다.---- \r\n 사용자 데이터 : {normalized_phrase} \r\n 필수 문장 : {phrase_pattern} \r\n 작용원리 양식 확인이 필요합니다'
+                # f"문제: 필수 문장 {phrase_pattern}가 데이터 전체에 포함되지 않았습니다."
+                )
 
     # 금지 단어 포함 여부 확인
     lines = data.splitlines()
@@ -35,7 +38,9 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
         for word_pattern in forbidden_words:
             normalized_word = normalize_text(word_pattern)  # 금지 단어 정규화
             if re.search(normalized_word, normalized_line):
-                error_messages.append(f"문제: 금지 단어 {word_pattern}가 {line_number}번째 줄에 발견되었습니다.")
+                error_messages.append(
+                    f'----사용 불가 단어가 확인되었습니다.---- \r\n 사용자 데이터 : {normalized_line} \r\n 사용 불가 단어 : {normalized_word} \r\n 시행규칙 45조(별표 7 제1호~10호) 내용 확인이 필요합니다.'
+                    )
     # # 결과 출력
     # if error_messages:
     #     print("다음과 같은 문제가 발견되었습니다:")

@@ -58,7 +58,7 @@ def check_invalid_words(data_list):
             for invalid_word in forbidden_words:
                 if invalid_word in row:  # 문자열 비교
                     error_message = (
-                        f'사용 불가 단어가 확인되었습니다. 사용자 데이터 : {row}  사용 불가 단어 : {invalid_word}'
+                        f"----사용 불가 단어가 확인되었습니다.---- \r\n 사용자 데이터 : {row}\r\n 사용 불가 단어 : {invalid_word} \r\n 시행규칙 45조(별표 7 제1호~10호) 내용 확인이 필요합니다."
                     )
                     error_messages.append(error_message)
                     continue  # 하나의 단어만 일치해도 중단
@@ -204,7 +204,7 @@ def validate_mat(file_path):
             elif not data[0] == b:
                 if not a == 100.0:
                     error_message = (
-                        f'합이 100이 아닙니다 - {a}'
+                        f'{data[1]}의 합이 100이 아닙니다 - {a}'
                     )
                     error_messages.append(error_message)
                     # a 초기화
@@ -212,7 +212,7 @@ def validate_mat(file_path):
                 b = data[0]  
         if not a == 100.0:
             error_message = (
-                f'합이 100이 아닙니다 - {a}'
+                f'---- 원재료 합이 100이 아닙니다 ---- \r\n 사용자 데이터 : {data[1]}의 합 {a} \r\n 원재료 - 규정 제10조 내용 확인이 필요합니다'
             )
             error_messages.append(error_message)
             # a 초기화
