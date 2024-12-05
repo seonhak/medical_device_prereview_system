@@ -48,7 +48,9 @@ def validate_dict_data(dict_data, forbidden_words):
         row_errors = []
         # "번호" 검증 - 숫자여야 하며 부등호 포함 불가
         if not item['번호'].isdigit() or '>' in item['번호'] or '<' in item['번호']:
-            row_errors.append(f"'번호'가 올바른 숫자가 아님 또는 부등호 포함: {item['번호']}")
+            row_errors.append(
+                f"----잘못된 데이터 형식이 발견되었습니다.('번호'가 숫자가 아님)---- \r\n 사용자 데이터: {item['번호']} \r\n 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
+                )
 
         # "명칭" 검증
         if not item['명칭']:
@@ -56,14 +58,19 @@ def validate_dict_data(dict_data, forbidden_words):
         else:
             for word in forbidden_words:
                 if word in item['명칭']:
-                    row_errors.append(f"'명칭'에 금지 단어 {word} 포함")
+                    row_errors.append(
+                        f"----사용 불가 단어가 확인되었습니다.---- \r\n 사용자 데이터 : {item['명칭']}\r\n 사용 불가 단어 : {word} \r\n 시행규칙 45조(별표 7 제1호~10호) 내용 확인이 필요합니다."
+                        )
 
         # "치수" 검증 - 숫자여야 하며 부등호 포함 불가
         if not item['치수'].replace('.', '', 1).isdigit() or '>' in item['치수'] or '<' in item['치수']:
-            row_errors.append(f"'치수'가 올바른 숫자가 아님 또는 부등호 포함: {item['치수']}")
+            row_errors.append(
+                f"----잘못된 데이터 형식이 발견되었습니다.('치수'가 숫자가 아님)---- \r\n 사용자 데이터 : {item['치수']} \r\n 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"
+                )
 
         if row_errors:
-            error_messages.append({"row": idx, "errors": row_errors})
+            for row in row_errors :
+                error_messages.append(row)    
     return error_messages
 
 def validate_size(file_path):
@@ -121,7 +128,6 @@ def validate_size(file_path):
                 errors = validate_dict_data(dict_data, forbidden_words)
                 if errors:
                     for error in errors:
-                        error_messages.append(
-                            f"페이지 {page_number}, 테이블 {table_idx}, 행 {error['row']}: {', '.join(error['errors'])}"
-                        )
+                        error_messages.append(error)
+
     return all_tables, error_messages
