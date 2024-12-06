@@ -112,7 +112,7 @@ def clean_and_filter_list(data):
     for item in data:
         if item is None:  # None 값 무시
             continue
-        cleaned_item = re.sub(r'\s+', '',str(item))  # 공백 제거
+        cleaned_item = re.sub(r'\s+|%', '',str(item))  # 공백 제거
         if cleaned_item:  # 비어 있지 않은 값만 추가
             cleaned_list.append(cleaned_item)
     return cleaned_list
@@ -224,10 +224,9 @@ def validate_mat(file_path):
         )
         error_messages.append(error_message)      
     # 사용 불가 단어 검증 로직 #
-    check_invalid_words(all_tables1)
+    all_tables.append(all_tables1)
     check_invalid_words(all_tables)
 
-    all_tables.append(all_tables1)
 
     
     return result_tables, error_messages

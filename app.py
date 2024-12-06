@@ -1,5 +1,5 @@
 
-from scripts.models.predict_label import predict_label
+# from scripts.models.predict_label import predict_label
 from scripts.validate.write_hwp_report import *
 from scripts.validate.read_to_pdf_mat import *
 from scripts.validate.read_to_pdf_pfu import *
@@ -88,9 +88,8 @@ def validate_all_docs(folder_path, code):
 # spring boot 내부에서 ProcessBuilder를 통해 cmd처럼 커맨드를 실행해 app.py를 실행
 # 서버 환경에 따라서 호출 방식과 환경변수 삽입 등이 달라질 수 있음
 # 결과 변수를 직접 받는게 아니라, 결과를 출력하면 ProcessBuilder로 출력한 결과를 읽어오는 방식
+
 all_tables, error_messages = validate_all_docs(f'./test_folder2_pdf/1번테스트', 2)
-
-
 # 0:접수처리 / 1:모양 및 구조 - 작용원리 / 2:모양 및 구조 - 외형 / 3:모양 및 구조 - 치수
 # 4:원재료 / 5:사용목적 / 6:사용방법 / 7:사용 시 주의사항
 
@@ -105,6 +104,7 @@ for errors in error_messages:
             if row != None:
                 error_result.append(row)
     else: error_result.append(errors)
+
 save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/test_folder/report1.hwp", error_result)
 
 
