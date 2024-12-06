@@ -33,7 +33,7 @@ def validate_dict_data(dict_data, forbidden_words):
         # "번호" 검증
         if not item['번호'].isdigit():
             row_errors.append(
-                f"----잘못된 데이터 형식이 발견되었습니다.('번호'가 숫자가 아님)---- \r\n 사용자 데이터: {item['번호']} \r\n 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
+                f" 신고서류 내 오류 내용: {item['번호']} \r\n 오류 발생 요인 : 잘못된 데이터 형식이 발견되었습니다.('번호'가 숫자가 아님) \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
                 )
 
         # "명칭" 검증
@@ -43,7 +43,7 @@ def validate_dict_data(dict_data, forbidden_words):
             for word in forbidden_words:
                 if word in item['명칭']:
                     row_errors.append(
-                        f"----사용 불가 단어가 확인되었습니다.---- \r\n 사용자 데이터 : {item['명칭']}\r\n 사용 불가 단어 : {word} \r\n 시행규칙 45조(별표 7 제1호~10호) 내용 확인이 필요합니다."
+                        f" 신고서류 내 오류 내용: {item['명칭']} \r\n 오류 발생 요인 : 사용 불가 단어 {word} 확인되었습니다. \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"                         
                         )
 
         # "기능 및 역할" 검증
@@ -53,7 +53,7 @@ def validate_dict_data(dict_data, forbidden_words):
             for word in forbidden_words:
                 if word in item['기능 및 역할']:
                     row_errors.append(
-                        f"----사용 불가 단어가 확인되었습니다.---- \r\n 사용자 데이터 : {item['명칭']}\r\n 사용 불가 단어 : {word} \r\n 시행규칙 45조(별표 7 제1호~10호) 내용 확인이 필요합니다."
+                        f" 신고서류 내 오류 내용: {item['기능 및 역할']} \r\n 오류 발생 요인 : 사용 불가 단어 {word} 확인되었습니다. \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"                         
                         )
 
         if row_errors:
