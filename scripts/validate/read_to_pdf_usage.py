@@ -27,7 +27,7 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
         normalized_phrase = normalize_text(phrase_pattern)  # 필수 문장 정규화
         if normalized_phrase not in normalized_data:
             error_messages.append(
-                f'----필수 문장이 포함되지 않았습니다.---- \r\n 사용자 데이터 : {normalized_phrase} \r\n 필수 문장 : {phrase_pattern} \r\n 사용방법 양식 확인이 필요합니다'
+                f" 신고서류 내 오류 내용: {normalized_phrase} \r\n 오류 발생 요인 : 필수 문장 {phrase_pattern}가 포함되지 않았습니다. \r\n 오류 사항에 대한 근거 : 사용방법 - 규정 제13조(모양 및 구조) 내용 확인이 필요합니다" 
                 )
 
     # 금지 단어 포함 여부 확인
@@ -38,7 +38,7 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
             normalized_word = normalize_text(word_pattern)  # 금지 단어 정규화
             if re.search(normalized_word, normalized_line):
                 error_messages.append(
-                    f'----사용 불가 단어가 확인되었습니다.---- \r\n 사용자 데이터 : {normalized_line} \r\n 사용 불가 단어 : {normalized_word} \r\n 시행규칙 45조(별표 7 제1호~10호) 내용 확인이 필요합니다.'
+                    f" 신고서류 내 오류 내용: {normalized_line} \r\n 오류 발생 요인 : 필수 문장 {normalized_word}가 포함되지 않았습니다. \r\n 오류 사항에 대한 근거 : 사용방법 - 규정 제13조(모양 및 구조) 내용 확인이 필요합니다" 
                     )
     # # 결과 출력
     # if error_messages:
