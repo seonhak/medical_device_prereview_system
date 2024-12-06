@@ -8,6 +8,12 @@ from scripts.validate.read_to_pdf_size import *
 from scripts.validate.read_to_pdf_usage import *
 from scripts.validate.read_to_pdf_wp import *
 from scripts.validate.read_pdf_file_with_keyword import *
+shape_table = []
+wp_table = []
+size_table = []
+mat_table = []
+usage_table = []
+pfu_table = []
 
 def clean_text(text):
     """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
@@ -19,6 +25,12 @@ def validate_all_docs(folder_path, code):
     keywords = ['외형', '작용원리', '치수', '원재료', '사용방법', '주의사항']
     error_messages = []
     all_tables = []
+    shape_table = []
+    wp_table = []
+    size_table = []
+    mat_table = []
+    usage_table = []
+    pfu_table = []
     for keyword in keywords :
         if keyword == '외형':
             shape_file = find_pdf_files_with_keyword(folder_path, keyword)
@@ -76,7 +88,8 @@ def validate_all_docs(folder_path, code):
 # spring boot 내부에서 ProcessBuilder를 통해 cmd처럼 커맨드를 실행해 app.py를 실행
 # 서버 환경에 따라서 호출 방식과 환경변수 삽입 등이 달라질 수 있음
 # 결과 변수를 직접 받는게 아니라, 결과를 출력하면 ProcessBuilder로 출력한 결과를 읽어오는 방식
-all_tables, error_messages = validate_all_docs(f'./test_folder', 1)
+all_tables, error_messages = validate_all_docs(f'./test_folder2_pdf/1번테스트', 2)
+
 
 # 0:접수처리 / 1:모양 및 구조 - 작용원리 / 2:모양 및 구조 - 외형 / 3:모양 및 구조 - 치수
 # 4:원재료 / 5:사용목적 / 6:사용방법 / 7:사용 시 주의사항
@@ -92,23 +105,25 @@ for errors in error_messages:
             if row != None:
                 error_result.append(row)
     else: error_result.append(errors)
-save_list_to_hwp(r"C:\Users\USER\Desktop\식약처AI\새폴더\report\test1.hwp", error_result)
+save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/test_folder/report1.hwp", error_result)
 
 
-# kobert_input = []
-# kobert_result = []
-# print("AI 검증 ===========================")
-# for table in all_tables:
-#     if table != None and type(table) == list:
-#         for row in table:
-#             if row != None and type(row) == str and not clean_text(row) == '':
-#                 kobert_result.append(predict_label(row))
-#                 # print(row)
-#     else:
-#         if table != None and type(table) == str and not clean_text(table) == '':
-#                 kobert_result.append(predict_label(table))
-#                 # print(table)
-        
-# # print(kobert_result)
-# save_list_to_hwp(r"C:\Users\USER\Desktop\식약처AI\새 폴더\report\test.hwp", kobert_result)
+
+kobert_result = []
+print("AI 검증 ===========================")
+
+for table in all_tables:
+    if table != None and type(table) == list:
+        temp = ''
+        for row in table:
+            if row != None and type(row) == str and not clean_text(row) == '':
+                temp += row
+                # print(row)
+        kobert_result.append(predict_label(temp))
+    else:
+        if table != None and type(table) == str and not clean_text(table) == '':
+            kobert_result.append(predict_label(table))
+                # print(table)
+print(kobert_result)
+save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/test_folder/kobert_report1.hwp", kobert_result)
 
