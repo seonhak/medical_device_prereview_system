@@ -139,6 +139,7 @@ def validate_mat(file_path):
     all_tables = []
     all_tables1 = []
     all_tables2 = []
+    temp_data = []
     with pdfplumber.open(file_path) as pdf:
         # 페이지 0번부터 읽기를 시작한다 page : 총 페이지 수 / page_number : 페이지 번호 출력
         for page_number , page in enumerate(pdf.pages, start=0):
@@ -149,6 +150,12 @@ def validate_mat(file_path):
             for table_number,tables in enumerate(page_tables,start=0):
                 # 페이지에서 읽어온 테이블의 첫 번째 행
                 first_row = preprocess_row(tables[0])
+                if len(first_row)>6:
+                    error_message = (
+                        f' 신고서류 내 오류 내용 : {first_row} \r\n 오류 발생 요인 : 양식에서 제공된 표와 다르게 인식되고 있습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                    )
+                    error_messages.append(error_message)
+                    break
                 try:
                     if first_row == fixed_header :
                         # table_clean = clean_and_filter_list(tables)
@@ -163,6 +170,7 @@ def validate_mat(file_path):
                                         )
                                         error_messages.append(error_message)                                
                                 all_tables.append(clean_table1)
+                                temp_data = clean_table1
                             elif len(clean_table1) == 1 and not clean_table1[0] in (valid_keywords2 + valid_keywords3 + valid_keywords4):
                                 all_tables2.append(clean_table1)
                             elif (len(table1) > 0 and (clean_table1[0] in valid_keywords2 or clean_table1[0] in '원재료공통기재사항')):
@@ -192,7 +200,12 @@ def validate_mat(file_path):
                                         error_messages.append(error_message)                                  
                                 if not (clean_table1[0] == '원재료제조자정보'):
                                     clean_table1.insert(0,'원재료제조자정보')
-                                all_tables1.append(clean_table1)       
+                                all_tables1.append(clean_table1)    
+                            elif table1[0] == None or '':
+                                clean_table1.insert(0,temp_data[0])
+                                if table1[1] == None or '':
+                                    clean_table1.insert(1,temp_data[1])
+                                all_tables.append(clean_table1)                                   
                             else:
                                 error_message = (
                                     f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 일련 번호가 숫자(특수문자 금지) 또는 신고서류 양식과 일치하지 않습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
@@ -222,18 +235,23 @@ def validate_mat(file_path):
                                     table1.insert(0,'원재료제조자정보')
                                     all_tables1.append(table1)    
                             else:
-                                pass                          
+                                pass      
+                    elif len(table1) > 6:
+                        error_message = (
+                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 양식에서 제공된 표와 다르게 인식되고 있습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다' 
+                        )                     
                     else:
                         error_message = (
-                            f' 신고서류 내 오류 내용 : {table}  \r\n 오류 발생 요인 : 양식에서 제공된 내용과 일치하지 않습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                            f' 신고서류 내 오류 내용 : {first_row}  \r\n 오류 발생 요인 : 양식에서 제공된 내용과 일치하지 않습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                         )
                         error_messages.append(error_message)
                 except IndexError:
                     error_message = (
-                            f' 신고서류 내 오류 내용 : {table}  \r\n 오류 발생 요인 : 데이터를 읽을 수 없습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                            f' 신고서류 내 오류 내용 : {first_row}  \r\n 오류 발생 요인 : 데이터를 읽을 수 없습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                         )
                     error_messages.append(error_message)
                     continue
+        
     if len(all_tables1) == 0:
         error_message =(
             f' 신고서류 내 오류 내용 : 잘못된 형식으로 구성되었습니다. \r\n 오류 발생 요인 : 자사규격에 관련된 정보 입력이 되지 않았습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다' 
@@ -270,7 +288,9 @@ def validate_mat(file_path):
     # 사용 불가 단어 검증 로직 #
     all_tables.append(all_tables1)
     # check_invalid_words(all_tables)
+    # check_invalid_words(all_tables)
+    # return all_tables, error_messages
 
     for i in error_messages:
         print(i)
-validate_mat(r"C:\Users\USER\Desktop\식약처검증\원재료2.pdf")
+validate_mat(r"C:\Users\USER\Desktop\식약처검증\검증데이터_10sets\3번테스트\(자가점착형)원재료.3hwp.pdf")
