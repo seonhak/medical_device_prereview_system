@@ -2,6 +2,10 @@ import os
 import re
 import pdfplumber
 from .forbidden_words import *
+=======
+import unicodedata
+from forbidden_words import *
+>>>>>>> 9c9c4bed88569ef42797d0cf2797c41444136793
 # from save_error_to_txt import *
 error_messages = []  # 모든 오류 메시지를 저장할 리스트
 fixed_header = ['일련번호', '부분품의명칭', '원재료명또는성분명', '규격', '분량', '비고(인체접촉여부및접촉부위첨가목적)']

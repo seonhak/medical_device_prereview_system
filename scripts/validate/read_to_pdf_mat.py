@@ -146,8 +146,6 @@ def validate_mat(file_path):
                             temp = temp + r
                     result_tables.append(temp)
                     
-                    
-                    
                     if ( len(a) > 0 and
                         a[0] is not None and str(a[0]).isdigit() and
                         a[4] is not None and str(a[4]).isdigit()
