@@ -64,7 +64,7 @@ def validate_dict_data(dict_data, forbidden_words):
         # "치수" 검증 - 숫자여야 하며 부등호 포함 불가
         if not item['치수'].replace('.', '', 1).isdigit() or '>' in item['치수'] or '<' in item['치수']:
             row_errors.append(
-                f" 신고서류 내 오류 내용 : {item['치수']} \r\n 오류 발생 요인 : 잘못된 데이터 형식이 발견되었습니다.('번호'가 숫자가 아님)  \r\n 오류 사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
+                f" 신고서류 내 오류 내용 : {item['치수']} \r\n 오류 발생 요인 : 잘못된 데이터 형식이 발견되었습니다.('치수'가 숫자가 아님)  \r\n 오류 사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
                 )
 
         if row_errors:
