@@ -1,7 +1,7 @@
 import os
 import re
 import pdfplumber
-from forbidden_words import *
+from .forbidden_words import *
 # from save_error_to_txt import *
 error_messages = []  # 모든 오류 메시지를 저장할 리스트
 fixed_header = ['일련번호', '부분품의명칭', '원재료명또는성분명', '규격', '분량', '비고(인체접촉여부및접촉부위첨가목적)']
@@ -180,7 +180,7 @@ def validate_mat(file_path):
                                             f' 신고서류 내 오류 내용 : {table1}의 {row} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                         )
                                         error_messages.append(error_message)
-                                print(type(clean_table1[0]))                                  
+                                # print(type(clean_table1[0]))                                  
                                 if not (clean_table1[0] == '원재료물리‧화학정보'):
                                     clean_table1.insert(0,'원재료물리‧화학정보')
                                 all_tables1.append(clean_table1)                                   
@@ -225,12 +225,12 @@ def validate_mat(file_path):
                                 pass                          
                     else:
                         error_message = (
-                            f' 신고서류 내 오류 내용 : {table}  \r\n 오류 발생 요인 : 양식에서 제공된 내용과 일치하지 않습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                            f' 신고서류 내 오류 내용 : {table1}  \r\n 오류 발생 요인 : 양식에서 제공된 내용과 일치하지 않습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                         )
                         error_messages.append(error_message)
                 except IndexError:
                     error_message = (
-                            f' 신고서류 내 오류 내용 : {table}  \r\n 오류 발생 요인 : 데이터를 읽을 수 없습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                            f' 신고서류 내 오류 내용 : {table1}  \r\n 오류 발생 요인 : 데이터를 읽을 수 없습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                         )
                     error_messages.append(error_message)
                     continue
@@ -244,14 +244,22 @@ def validate_mat(file_path):
         b = all_tables[0][0]
         for data in all_tables:
             if b == data[0]:
+                print(f"원재료 합 : {a}")
                 a = a+float(data[4])
+                
             elif not data[0] == b:
                 if not a == 100.0:
                     error_message = (
                         f'{data[1]}의 합이 100이 아닙니다 - {a}'
                     )
                     error_messages.append(error_message)
+                    error_message = (
+                        f' 신고서류 내 오류 내용 : {data[1]}의 합 {a} \r\n 오류 발생 요인 : 원재료 합이 100이 아닙니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조 내용 확인이 필요합니다'
+                    )
+                    error_messages.append(error_message)
                     # a 초기화
+                # if is_float(data[4]) :
+                # 
                 a = float(data[4])
                 b = data[0]  
         if not a == 100.0:
@@ -271,6 +279,8 @@ def validate_mat(file_path):
     all_tables.append(all_tables1)
     # check_invalid_words(all_tables)
 
-    for i in error_messages:
-        print(i)
-validate_mat(r"C:\Users\USER\Desktop\식약처검증\원재료2.pdf")
+    # for i in error_messages:
+    #     print(i)
+        
+    return all_tables, error_messages
+# validate_mat(r"C:\Users\USER\Desktop\식약처검증\원재료2.pdf")
