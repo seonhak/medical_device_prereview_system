@@ -1,4 +1,4 @@
-from scripts.models.predict_label import predict_label
+# from scripts.models.predict_label import predict_label
 from scripts.validate.write_hwp_report import *
 from scripts.validate.testmat import *
 from scripts.validate.read_to_pdf_pfu import *
@@ -101,38 +101,38 @@ def validate_all_docs(folder_path, code):
 # 결과 변수를 직접 받는게 아니라, 결과를 출력하면 ProcessBuilder로 출력한 결과를 읽어오는 방식
 
 # 1 : 스타킹형 2 : 벨트형 3 : 자가점착형
-all_tables, error_messages = validate_all_docs(f'../검증데이터_10sets/10번테스트', 1)
+all_tables, error_messages = validate_all_docs(f'../test_folder2_pdf/1번테스트', 2)
+# all_tables, error_messages = validate_all_docs(r'./test_folder2_pdf/검증데이터_10sets/10번테스트', 1)
+
+error_result = []
+print("에러메시지 검증 ===========================")
+for errors in error_messages:
+    if errors != None and type(errors) == list:
+        for row in errors:
+            if row != None:
+                error_result.append(row)
+    else: error_result.append(errors)
+
+save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/test_folder/report10.hwp", error_result)
 
 
-# error_result = []
-# print("에러메시지 검증 ===========================")
-# for errors in error_messages:
-#     if errors != None and type(errors) == list:
-#         for row in errors:
-#             if row != None:
-#                 error_result.append(row)
-#     else: error_result.append(errors)
 
-# save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/test_folder/report10.hwp", error_result)
+# kobert_result = []
+# print("AI 검증 ===========================")
 
-
-
-kobert_result = []
-print("AI 검증 ===========================")
-
-for table in all_tables:
-    if table != None and type(table) == list:
-        temp = ''
-        for row in table:
-            if row != None and type(row) == str and not clean_text(row) == '':
-                temp += row
-                # print(row)
+# for table in all_tables:
+#     if table != None and type(table) == list:
+#         temp = ''
+#         for row in table:
+#             if row != None and type(row) == str and not clean_text(row) == '':
+#                 temp += row
+#                 # print(row)
         
-        kobert_result.append(predict_label(temp))
-    else:
-        if table != None and type(table) == str and not clean_text(table) == '':
-            kobert_result.append(predict_label(table))
-                # print(table)
-print(kobert_result)
-save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/test_folder/kobert_report10.hwp", kobert_result)
+#         kobert_result.append(predict_label(temp))
+#     else:
+#         if table != None and type(table) == str and not clean_text(table) == '':
+#             kobert_result.append(predict_label(table))
+#                 # print(table)
+# print(kobert_result)
+# save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/test_folder/kobert_report10.hwp", kobert_result)
 
