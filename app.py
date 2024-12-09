@@ -104,16 +104,16 @@ def validate_all_docs(folder_path, code):
 all_tables, error_messages = validate_all_docs(f'../검증데이터_10sets/10번테스트', 1)
 
 
-# error_result = []
-# print("에러메시지 검증 ===========================")
-# for errors in error_messages:
-#     if errors != None and type(errors) == list:
-#         for row in errors:
-#             if row != None:
-#                 error_result.append(row)
-#     else: error_result.append(errors)
+error_result = []
+print("에러메시지 검증 ===========================")
+for errors in error_messages:
+    if errors != None and type(errors) == list:
+        for row in errors:
+            if row != None:
+                error_result.append(row)
+    else: error_result.append(errors)
 
-# save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/test_folder/report10.hwp", error_result)
+save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/test_folder/report10.hwp", error_result)
 
 
 
