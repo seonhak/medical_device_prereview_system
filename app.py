@@ -1,4 +1,4 @@
-# from scripts.models.predict_label import predict_label
+from scripts.models.predict_label import predict_label
 from scripts.validate.write_hwp_report import *
 from scripts.validate.testmat import *
 from scripts.validate.read_to_pdf_pfu import *
@@ -7,6 +7,8 @@ from scripts.validate.read_to_pdf_size import *
 from scripts.validate.read_to_pdf_usage import *
 from scripts.validate.read_to_pdf_wp import *
 from scripts.validate.read_pdf_file_with_keyword import *
+from test_utils import *
+import os
 shape_table = []
 wp_table = []
 size_table = []
@@ -101,19 +103,64 @@ def validate_all_docs(folder_path, code):
 # 결과 변수를 직접 받는게 아니라, 결과를 출력하면 ProcessBuilder로 출력한 결과를 읽어오는 방식
 
 # 1 : 스타킹형 2 : 벨트형 3 : 자가점착형
-all_tables, error_messages = validate_all_docs(f'../test_folder2_pdf/1번테스트', 2)
-# all_tables, error_messages = validate_all_docs(r'./test_folder2_pdf/검증데이터_10sets/10번테스트', 1)
+# all_tables, error_messages = validate_all_docs('C:/Users/USER/Desktop/식약처/검증데이터_10sets/1번테스트', 2)    
+folder_list = get_folders(r"C:\Users\USER\Desktop\식약처\검증데이터_10sets")
 
-error_result = []
-print("에러메시지 검증 ===========================")
-for errors in error_messages:
-    if errors != None and type(errors) == list:
-        for row in errors:
-            if row != None:
-                error_result.append(row)
-    else: error_result.append(errors)
 
-save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/test_folder/report10.hwp", error_result)
+for folder in folder_list:
+    num = os.path.basename(folder).split("_")[0]
+    if '스타킹' in folder:
+        all_tables, error_messages = validate_all_docs(folder, 1)
+    elif '벨트형' in folder:
+        all_tables, error_messages = validate_all_docs(folder, 2)
+    elif '점착형' in folder:
+        all_tables, error_messages = validate_all_docs(folder, 3)
+    else:
+        print('폴더명이 맞지 않아요')
+    if all_tables and error_messages:
+        
+        error_result = []
+        print("에러메시지 검증 ===========================")
+        for errors in error_messages:
+            if errors != None and type(errors) == list:
+                for row in errors:
+                    if row != None:
+                        error_result.append(row)
+            else: error_result.append(errors)
+        save_filepath = fr"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/hwp_reports/report{num}.hwp"
+        save_list_to_hwp(save_filepath, error_result)
+        kobert_result = []
+        print("AI 검증 ===========================")
+        for table in all_tables:
+            if table != None and type(table) == list:
+                temp = ''
+                for row in table:
+                    if row != None and type(row) == str and not clean_text(row) == '':
+                        temp += row
+                kobert_result.append(predict_label(temp))
+            else:
+                if table != None and type(table) == str and not clean_text(table) == '':
+                    kobert_result.append(predict_label(table))
+        print(kobert_result)
+        save_filepath = fr"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/ai_reports/ai_report{num}.hwp"
+        save_list_to_hwp(save_filepath, kobert_result)
+
+
+
+
+
+# all_tables, error_messages = validate_all_docs(r'./test_folder', 2)
+
+# error_result = []
+# print("에러메시지 검증 ===========================")
+# for errors in error_messages:
+#     if errors != None and type(errors) == list:
+#         for row in errors:
+#             if row != None:
+#                 error_result.append(row)
+#     else: error_result.append(errors)
+
+# save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/hwp_reports/report.hwp", error_result)
 
 
 
@@ -134,5 +181,5 @@ save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_syst
 #             kobert_result.append(predict_label(table))
 #                 # print(table)
 # print(kobert_result)
-# save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/test_folder/kobert_report10.hwp", kobert_result)
+# save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/hwp_reports/kobert_report.hwp", kobert_result)
 
