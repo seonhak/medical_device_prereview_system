@@ -26,12 +26,14 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
     error_messages = []  # 모든 오류 메시지를 저장할 리스트
     # 데이터 정규화
     normalized_data = normalize_text(data)
+    print(normalized_data)
     # 필수 문장 포함 여부 확인
     for phrase_pattern in required_phrases:
         normalized_phrase = normalize_text(phrase_pattern)  # 필수 문장 정규화
+        print(normalized_phrase)
         if clean_text(normalized_phrase) not in clean_text(normalized_data):
             error_messages.append(
-                f" 신고서류 내 오류 내용: {normalized_phrase} \r\n 오류 발생 요인 : 필수 문장 {phrase_pattern}가 포함되지 않았습니다. \r\n 오류 사항에 대한 근거 : 작용원리 - 규정 제12조 내용 확인이 필요합니다"
+                f" 신고서류 내 오류 내용: {data} \r\n 오류 발생 요인 : 필수 문장 {phrase_pattern}가 포함되지 않았습니다. \r\n 오류 사항에 대한 근거 : 작용원리 - 규정 제12조 내용 확인이 필요합니다"
                 )
 
     # 금지 단어 포함 여부 확인
@@ -86,7 +88,7 @@ def validate_wp_belt1(pdf_file_path):
                     full_text += text + "\n"  # 페이지 구분을 위해 줄바꿈 추가
 
         # 전체 텍스트를 한 번에 처리
-        error_messages = process_data_with_normalization(full_text, required_phrases_stockings, forbidden_words)
+        error_messages = process_data_with_normalization(full_text, required_phrases_belt, forbidden_words)
         full_text = full_text.rstrip("\n")
 
     except Exception as e:
@@ -107,7 +109,7 @@ def validate_wp_self_adhesive_bandage1(pdf_file_path):
                     full_text += text + "\n"  # 페이지 구분을 위해 줄바꿈 추가
 
         # 전체 텍스트를 한 번에 처리
-        error_messages = process_data_with_normalization(full_text, required_phrases_stockings, forbidden_words)
+        error_messages = process_data_with_normalization(full_text, required_phrases_self_adhesive_bandage, forbidden_words)
         full_text = full_text.rstrip("\n")
 
         
