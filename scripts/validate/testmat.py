@@ -43,6 +43,16 @@ valid_keywords4 =[
     "제품명또는상품명",
     "제품번호또는모델명"
 ]
+valid_keywords5 = [
+    "일반명",
+    "화학명",
+    "구조식",
+    "CAS번호(존재시)",
+    "물질특성",
+    "제조자",
+    "제품명또는상품명",
+    "제품번호또는모델명"
+]
 
 def clean_text(text):
     """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
@@ -225,7 +235,7 @@ def validate_mat(file_path):
                                         f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 일련 번호가 숫자(특수문자 금지) 또는 신고서류 양식과 일치하지 않습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                     )
                                     error_messages.append(error_message)                                
-                        elif first_row[0] in valid_keywords:
+                        elif first_row[0] in valid_keywords or first_row[1] in valid_keywords5:
                             for table1 in tables:
                                 clean_table1 = clean_and_filter_list(table1)
                                 if clean_table1[0].isdigit():
@@ -503,8 +513,8 @@ def validate_mat(file_path):
         error_messages.append(e)
         # for i in error_messages:
         #     print(i)
-    # return all_tables, error_messages
+    return all_tables, error_messages
 
-    for i in error_messages:
-        print(i)
-validate_mat(r"C:\Users\USER\Desktop\검증용자료 20개\변경후\12 - 벨트형\원재료12.pdf")
+#     for i in error_messages:
+#         print(i)
+# validate_mat(r"C:\Users\USER\Documents\카카오톡 받은 파일\원재료 (1).pdf")
