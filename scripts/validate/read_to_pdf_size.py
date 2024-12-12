@@ -53,7 +53,9 @@ def validate_dict_data(dict_data, forbidden_words):
                 )
         # "명칭" 검증
         if not item['명칭']:
-            row_errors.append(f"'명칭'이 비어 있음")
+            row_errors.append(
+                f" 신고서류 내 오류 내용 : {item['명칭']} \r\n 오류 발생 요인 : 명칭이 입력되지 않았습니다. \r\n 오류 사항에 대한 근거 : 시행규칙 45조(별표 7 제1호~10호) 내용 확인이 필요합니다."
+                )
         else:
             for word in forbidden_words:
                 if word in item['명칭']:
@@ -97,7 +99,7 @@ def validate_size(file_path):
                 # 첫 번째 행 (헤더) 검증
                 if not table or not table[0]:
                     error_messages.append(
-                        f"페이지 {page_number}, 테이블 {table_idx}: 테이블 헤더가 비어 있음."
+                        f" 신고서류 내 오류 내용 : 표 {table_idx}: 행이 비어 있습니다 \r\n 오류 발생 요인 : 치수 양식과 일치하지 않습니다.  \r\n 오류 사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
                     )
                     continue
 
@@ -107,7 +109,7 @@ def validate_size(file_path):
                 # 헤더가 고정된 형식 또는 허용된 헤더 중 하나와 일치하지 않는 경우
                 if first_row != normalized_fixed_header and first_row not in allowed_headers:
                     error_messages.append(
-                        f"페이지 {page_number}, 테이블 {table_idx}: 헤더가 고정 헤더와 일치하지 않음. 추출된 헤더: {table[0]}"
+                        f" 신고서류 내 오류 내용 : 표 {table_idx}: 행이 올바르지 않습니다. \r\n 추출된 행: {table[0]} \r\n 오류 발생 요인 : 치수 양식과 일치하지 않습니다.  \r\n 오류 사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
                     )
                     validation_stopped = True  # 이후 검증 중단
                     break

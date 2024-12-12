@@ -1,4 +1,4 @@
-from scripts.models.predict_label import predict_label
+# from scripts.models.predict_label import predict_label
 from scripts.validate.write_hwp_report import *
 from scripts.validate.testmat import *
 from scripts.validate.read_to_pdf_pfu import *
@@ -140,10 +140,13 @@ def validate_all_docs(folder_path, code):
 
 # 1 : 스타킹형 2 : 벨트형 3 : 자가점착형
 # all_tables, error_messages = validate_all_docs('C:/Users/USER/Desktop/식약처/검증데이터_10sets/1번테스트', 2)    
-folder_list = get_folders(r"C:\Users\USER\Desktop\식약처\검증데이터_10sets")
-
-
+folder_list = get_folders(r"C:\Users\USER\Desktop\검증용자료 20개\검증데이터-51sets")
+# folder_list = get_folders(r"C:\Users\USER\Desktop\검증용자료 20개\test")
+print(folder_list)
+all_tables = []
+error_messages = []
 for folder in folder_list:
+    
     num = os.path.basename(folder).split("_")[0]
     if '스타킹' in folder:
         all_tables, error_messages = validate_all_docs(folder, 1)
@@ -163,23 +166,25 @@ for folder in folder_list:
                     if row != None:
                         error_result.append(row)
             else: error_result.append(errors)
-        save_filepath = fr"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/hwp_reports/report{num}.hwp"
+        save_filepath = fr"C:\Users\USER\Desktop\검증용자료 20개\report/report{num}.hwp"
         save_list_to_hwp(save_filepath, error_result)
         kobert_result = []
-        print("AI 검증 ===========================")
-        for table in all_tables:
-            if table != None and type(table) == list:
-                temp = ''
-                for row in table:
-                    if row != None and type(row) == str and not clean_text(row) == '':
-                        temp += row
-                kobert_result.append(predict_label(temp))
-            else:
-                if table != None and type(table) == str and not clean_text(table) == '':
-                    kobert_result.append(predict_label(table))
-        print(kobert_result)
-        save_filepath = fr"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/ai_reports/ai_report{num}.hwp"
-        save_list_to_hwp(save_filepath, kobert_result)
+    all_tables = []
+    error_messages = []
+        # print("AI 검증 ===========================")
+        # for table in all_tables:
+        #     if table != None and type(table) == list:
+        #         temp = ''
+        #         for row in table:
+        #             if row != None and type(row) == str and not clean_text(row) == '':
+        #                 temp += row
+        #         kobert_result.append(predict_label(temp))
+        #     else:
+        #         if table != None and type(table) == str and not clean_text(table) == '':
+        #             kobert_result.append(predict_label(table))
+        # print(kobert_result)
+        # save_filepath = fr"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/ai_reports/ai_report{num}.hwp"
+        # save_list_to_hwp(save_filepath, kobert_result)
 
 
 

@@ -40,7 +40,7 @@ def validate_dict_data(dict_data, forbidden_words):
                     )
             # "명칭" 검증
             if not item['명칭']:
-                row_errors.append(f"신고 서류 오류 내용 : '명칭'이 비어 있음 \r\n 오류 발생 요인 : 잘못된 데이터 형식이 발견되었습니다. \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다")
+                row_errors.append(f"신고 서류 오류 내용 : {item['명칭']} \r\n 오류 발생 요인 : '명칭'이 비어 있습니다.  \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다")
             else:
                 for word in forbidden_words:
                     if word in item['명칭']:
@@ -50,7 +50,7 @@ def validate_dict_data(dict_data, forbidden_words):
 
             # "기능 및 역할" 검증
             if not item['기능 및 역할']:
-                row_errors.append(f"신고 서류 오류 내용 : '기능 및 역할'이 비어 있음 \r\n 오류 발생 요인 : 잘못된 데이터 형식이 발견되었습니다. \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다")
+                row_errors.append(f"신고 서류 오류 내용 : {item['기능 및 역할']} \r\n 오류 발생 요인 : '기능 및 역할'이 비어 있음 \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다")
             else:
                 for word in forbidden_words:
                     if word in item['기능 및 역할']:
