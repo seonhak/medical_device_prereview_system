@@ -21,8 +21,8 @@ def predict_label(input_text):
     # print(type(predicted_label))
     if(predict_label == 0) : 
         result = f"입력파일 내용 : {input_text} \r\n 문장에서 오류가 검출되지 않는 것으로 판단됩니다."
-        print(result)
+        # print(result)
     else :
         result = f"입력파일 내용 : {input_text} \r\n 문장에서 오류가 검출되는 것으로 판단됩니다."
-        print(result)
+        # print(result)
     return result
