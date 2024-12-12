@@ -36,7 +36,8 @@ valid_keywords2 = [
 valid_keywords3 = [
     "구조식",
     "CAS번호(존재시)",
-    "물질특성"
+    "물질특성",
+    "CAS번호"
 ]
 valid_keywords4 =[
     "제조자",
