@@ -60,7 +60,7 @@ def validate_dict_data(dict_data, forbidden_words):
             for word in forbidden_words:
                 if word in item['명칭']:
                     row_errors.append(
-                        f" 신고서류 내 오류 내용 : {item['명칭']} \r\n 오류 발생 요인 : 사용 불가 단어 {word} 확인 되었습니다. \r\n 오류 사항에 대한 근거 : 시행규칙 45조(별표 7 제1호~10호) 내용 확인이 필요합니다."
+                        f" 신고서류 내 오류 내용 : {item['명칭']} \r\n 오류 발생 요인 : 사용 불가 단어 \'{word}\'(이)가 확인 되었습니다. \r\n 오류 사항에 대한 근거 : 시행규칙 45조(별표 7 제1호~10호) 내용 확인이 필요합니다."
                         )
 
         # "치수" 검증 - 숫자여야 하며 부등호 포함 불가

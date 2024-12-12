@@ -45,7 +45,7 @@ def validate_dict_data(dict_data, forbidden_words):
                 for word in forbidden_words:
                     if word in item['명칭']:
                         row_errors.append(
-                            f" 신고서류 내 오류 내용: {item['명칭']} \r\n 오류 발생 요인 : 사용 불가 단어 {word} 확인되었습니다. \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"                         
+                            f" 신고서류 내 오류 내용: {item['명칭']} \r\n 오류 발생 요인 : 사용 불가 단어 \'{word}\'(이)가 확인되었습니다. \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"                         
                             )
 
             # "기능 및 역할" 검증
@@ -55,7 +55,7 @@ def validate_dict_data(dict_data, forbidden_words):
                 for word in forbidden_words:
                     if word in item['기능 및 역할']:
                         row_errors.append(
-                            f" 신고서류 내 오류 내용: {item['기능 및 역할']} \r\n 오류 발생 요인 : 사용 불가 단어 {word} 확인되었습니다. \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"                         
+                            f" 신고서류 내 오류 내용: {item['기능 및 역할']} \r\n 오류 발생 요인 : 사용 불가 단어 \'{word}\'(이)가 확인되었습니다. \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"                         
                             )
 
         if row_errors:
