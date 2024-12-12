@@ -26,7 +26,7 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
     error_messages = []  # 모든 오류 메시지를 저장할 리스트
     # 데이터 정규화
     normalized_data = normalize_text(data)
-    print(normalized_data)
+    # print(normalized_data)
     # 필수 문장 포함 여부 확인
     for phrase_pattern in required_phrases:
         normalized_phrase = normalize_text(phrase_pattern)  # 필수 문장 정규화
