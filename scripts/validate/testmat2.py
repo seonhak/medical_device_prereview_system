@@ -170,6 +170,7 @@ def validate_mat(file_path):
                 for table_number,tables in enumerate(page_tables,start=0):
                     # 페이지에서 읽어온 테이블의 첫 번째 행
                     first_row = preprocess_row(tables[0])
+                    clean_first_row = clean_and_filter_list(first_row)
                     try:
                         if len(first_row)>6:
                             error_message = (
@@ -186,7 +187,7 @@ def validate_mat(file_path):
                                     for row in table1:
                                         if row == None or str(row).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1}\r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1}\r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)
                                             if len(temp_data) > 0 :
@@ -208,7 +209,7 @@ def validate_mat(file_path):
                                 elif (len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords2) or (len(clean_table1)> 1 and clean_table1[1] in valid_keywords2 or clean_table1[0] in '원재료공통기재사항')):
                                     if table1[4] == None or str(table1[4]).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)     
                                     if len(clean_table1) < 3 and not (clean_table1[0] == '원재료공통기재사항'):
@@ -217,7 +218,7 @@ def validate_mat(file_path):
                                 elif (len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords3) or (len(clean_table1)>1 and clean_table1[1] in valid_keywords3) or clean_table1[0] in '원재료물리‧화학정보'):
                                     if table1[4] == None or str(table1[4]).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)
                                     # print(type(clean_table1[0]))                                  
@@ -227,7 +228,7 @@ def validate_mat(file_path):
                                 elif len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords4) or (len(clean_table1)>1 and clean_table1[1] in valid_keywords4 or clean_table1[0] in '원재료제조자정보'):
                                     if table1[4] == None or str(table1[4]).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)                                  
                                     if len(clean_table1) < 3 and  not (clean_table1[0] == '원재료제조자정보'):
@@ -241,7 +242,7 @@ def validate_mat(file_path):
                                         clean_table1.insert(5,temp_data[5])
                                     if ((table1[2] in (None, '')) or (table1[3] in (None, '')) or (table1[4] in (None, ''))):
                                         error_message = (
-                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터를 입력하지 않았습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                         )
                                         error_messages.append(error_message)
                                         if table1[2] in (None,''):
@@ -255,25 +256,30 @@ def validate_mat(file_path):
                                             all_tables.append(clean_table1)                                            
                                         else:
                                             all_tables.append(clean_table1)
+                                    elif any('검증오류방지' in item for item in clean_table1):
+                                        error_message = (
+                                         f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'   
+                                        )
+                                        error_messages.append(error_message)
                                     else:
                                         all_tables.append(clean_table1)
                                 elif table1[0] == '일련번호':
                                     continue
                                 elif len(clean_table1) == 0:
                                     error_message = (
-                                        f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                        f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                     )
                                     error_messages.append(error_message)
                                     continue
                                 # 분기 추가
                                 elif isinstance(table1[0],str):
-                                    error_message = (
-                                        f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 일련 번호가 숫자(특수문자 금지) 또는 신고서류 양식과 일치하지 않습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
-                                    )
+                                    # error_message = (
+                                    #     f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 일련 번호가 숫자(특수문자 금지) 또는 신고서류 양식과 일치하지 않습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                    # )
                                     for row in table1:
                                         if row == None or str(row).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)
                                             if len(temp_data) > 0 :
@@ -287,6 +293,16 @@ def validate_mat(file_path):
                                                     if table1[3] == None or str(table1[3]).strip() =='':
                                                         clean_table1.insert(3,'검증오류방지')
                                                         break
+                                                if table1[4] == None or str(table1[4]).strip() == '':
+                                                    clean_table1.insert(4,float(0))
+                                                if table1[3] == None or str(table1[3]).strip() == '':
+                                                    clean_table1.insert(3,'검증오류방지')
+                                                if table1[2] == None or str(table1[2]).strip() == '':
+                                                    clean_table1.insert(2,'검증오류방지')
+                                                if table1[1] == None or str(table1[1]).strip() == '':
+                                                    clean_table1.insert(1,'검증오류방지')
+                                                if table1[0] == None or str(table1[0]).strip() == '':
+                                                    clean_table1.insert(0,'검증오류방지')
                                     all_tables.append(clean_table1)
                                     temp_data = clean_table1
                                     temp_data1.append(temp_data[3])
@@ -295,7 +311,7 @@ def validate_mat(file_path):
                                 elif (len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords2) or (len(clean_table1)> 1 and clean_table1[1] in valid_keywords2 or clean_table1[0] in '원재료공통기재사항')):
                                     if table1[4] == None or str(table1[4]).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)     
                                     if len(clean_table1) < 3 and not (clean_table1[0] == '원재료공통기재사항'):
@@ -304,7 +320,7 @@ def validate_mat(file_path):
                                 elif (len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords3) or (len(clean_table1)>1 and clean_table1[1] in valid_keywords3) or clean_table1[0] in '원재료물리‧화학정보'):
                                     if table1[4] == None or str(table1[4]).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)
                                     # print(type(clean_table1[0]))                                  
@@ -314,7 +330,7 @@ def validate_mat(file_path):
                                 elif len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords4) or (len(clean_table1)>1 and clean_table1[1] in valid_keywords4 or clean_table1[0] in '원재료제조자정보'):
                                     if table1[4] == None or str(table1[4]).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)                                  
                                     if len(clean_table1) < 3 and  not (clean_table1[0] == '원재료제조자정보'):
@@ -328,7 +344,7 @@ def validate_mat(file_path):
                                         clean_table1.insert(5,temp_data[5])
                                     if ((table1[2] in (None, '')) or (table1[3] in (None, '')) or (table1[4] in (None, ''))):
                                         error_message = (
-                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터를 입력하지 않았습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                         )
                                         error_messages.append(error_message)
                                         if table1[2] in (None,''):
@@ -356,7 +372,7 @@ def validate_mat(file_path):
                                     for row in table1:
                                         if row == None or str(row).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)
                                             if len(temp_data) > 0 :
@@ -373,7 +389,7 @@ def validate_mat(file_path):
                                     if len(table1) == 6:
                                         if table1[4] == None or str(table1[4]).strip() == '':
                                                 error_message = (
-                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                 )
                                                 error_messages.append(error_message)     
                                         if not (clean_table1[0] == '원재료공통기재사항'):
@@ -382,7 +398,7 @@ def validate_mat(file_path):
                                     elif len(table1) == 3:
                                         if table1[2] == None or str(table1[2]).strip() == '':
                                                 error_message = (
-                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                 )
                                                 error_messages.append(error_message)     
                                         if not (clean_table1[0] == '원재료공통기재사항'):
@@ -392,7 +408,7 @@ def validate_mat(file_path):
                                     if len(table1) == 3:
                                         if table1[2] == None or str(table1[2]).strip() == '':
                                                 error_message = (
-                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                 )
                                                 error_messages.append(error_message)
                                         if not (clean_table1[0] == '원재료물리‧화학정보'):
@@ -401,7 +417,7 @@ def validate_mat(file_path):
                                     elif len(table1) == 6:
                                         if table1[4] == None or str(table1[4]).strip() == '':
                                                 error_message = (
-                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                 )
                                                 error_messages.append(error_message)
                                         if not (clean_table1[0] == '원재료물리‧화학정보'):
@@ -411,7 +427,7 @@ def validate_mat(file_path):
                                     if len(table1) == 3:
                                         if table1[2] == None or str(table1[2]).strip() == '':
                                                 error_message = (
-                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                 )
                                                 error_messages.append(error_message)                                  
                                         if not (clean_table1[0] == '원재료제조자정보'):
@@ -420,7 +436,7 @@ def validate_mat(file_path):
                                     elif  len(table1) == 6:
                                         if table1[4] == None or str(table1[4]).strip() == '':
                                                 error_message = (
-                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                 )
                                                 error_messages.append(error_message)                                  
                                         if not (clean_table1[0] == '원재료제조자정보'):
@@ -441,7 +457,7 @@ def validate_mat(file_path):
                                     continue        
                                 elif len(clean_table1) == 0:
                                     error_message = (
-                                        f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                        f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                     )
                                     error_messages.append(error_message)
                                     continue                                                                                                 
@@ -477,6 +493,108 @@ def validate_mat(file_path):
                             error_message = (
                                 f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 양식에서 제공된 표와 다르게 인식되고 있습니다. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다' 
                             )
+                            error_messages.append(error_message)
+                        elif len(clean_first_row) == 1 :
+                            for table1 in tables[1:]:
+                                clean_table1 = clean_and_filter_list(table1)                            
+                                if clean_table1[0].isdigit():
+                                    for row in table1:
+                                        if row == None or str(row).strip() == '':
+                                            error_message = (
+                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                            )
+                                            error_messages.append(error_message)
+                                            if len(temp_data) > 0 :
+                                                if table1[5] == None or str(table1[5]).strip() =='':
+                                                    clean_table1.insert(5,temp_data[5])
+                                            elif len(temp_data) == 0:
+                                                clean_table1.insert(5,'검증오류방지')                                                                                
+                                    all_tables.append(clean_table1)
+                                    temp_data = clean_table1
+                                    temp_data1.append(temp_data[3])
+                                elif len(clean_table1) == 1 and not clean_table1[0] in (valid_keywords2 + valid_keywords3 + valid_keywords4):
+                                    all_tables2.append(clean_table1)
+                                elif (len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords2) or (len(clean_table1)>1 and clean_table1[1] in valid_keywords2 or clean_table1[0] in '원재료공통기재사항')):
+                                    if len(table1) == 6:
+                                        if table1[4] == None or str(table1[4]).strip() == '':
+                                                error_message = (
+                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                )
+                                                error_messages.append(error_message)     
+                                        if not (clean_table1[0] == '원재료공통기재사항'):
+                                            clean_table1.insert(0,'원재료공통기재사항')
+                                        all_tables1.append(clean_table1)
+                                    elif len(table1) == 3:
+                                        if table1[2] == None or str(table1[2]).strip() == '':
+                                                error_message = (
+                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                )
+                                                error_messages.append(error_message)     
+                                        if not (clean_table1[0] == '원재료공통기재사항'):
+                                            clean_table1.insert(0,'원재료공통기재사항')
+                                        all_tables1.append(clean_table1)                                    
+                                elif (len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords3) or (len(clean_table1)>1 and clean_table1[1] in valid_keywords3) or clean_table1[0] in '원재료물리‧화학정보'):                                    
+                                    if len(table1) == 3:
+                                        if table1[2] == None or str(table1[2]).strip() == '':
+                                                error_message = (
+                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                )
+                                                error_messages.append(error_message)
+                                        if not (clean_table1[0] == '원재료물리‧화학정보'):
+                                            clean_table1.insert(0,'원재료물리‧화학정보')
+                                        all_tables1.append(clean_table1)
+                                    elif len(table1) == 6:
+                                        if table1[4] == None or str(table1[4]).strip() == '':
+                                                error_message = (
+                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                )
+                                                error_messages.append(error_message)
+                                        if not (clean_table1[0] == '원재료물리‧화학정보'):
+                                            clean_table1.insert(0,'원재료물리‧화학정보')
+                                        all_tables1.append(clean_table1)                                                                         
+                                elif len(table1) > 0 and (len (clean_table1)>0 and clean_table1[0] in valid_keywords4)  or (len(clean_table1)>1 and clean_table1[1] in valid_keywords4 or clean_table1[0] in '원재료제조자정보'):
+                                    if len(table1) == 3:
+                                        if table1[2] == None or str(table1[2]).strip() == '':
+                                                error_message = (
+                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                )
+                                                error_messages.append(error_message)                                  
+                                        if not (clean_table1[0] == '원재료제조자정보'):
+                                            clean_table1.insert(0,'원재료제조자정보')
+                                        all_tables1.append(clean_table1)
+                                    elif  len(table1) == 6:
+                                        if table1[4] == None or str(table1[4]).strip() == '':
+                                                error_message = (
+                                                    f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                )
+                                                error_messages.append(error_message)                                  
+                                        if not (clean_table1[0] == '원재료제조자정보'):
+                                            clean_table1.insert(0,'원재료제조자정보')
+                                        all_tables1.append(clean_table1)                                     
+                                elif table1[0] == None or '':
+                                    clean_table1.insert(0,temp_data[0])
+                                    if table1[1] == None or '':
+                                        clean_table1.insert(1,temp_data[1])
+                                    if table1[5] == None or '':
+                                        clean_table1.insert(5,temp_data[5])
+                                    if table1[3] == None or '':
+                                        clean_table1.insert(3,'검증오류방지')
+                                    if table1[4] == None or '':
+                                        clean_table1.insert(4,float(0))                                        
+                                    all_tables.append(clean_table1)       
+                                elif table1[0] == '일련번호':
+                                    continue        
+                                elif len(clean_table1) == 0:
+                                    error_message = (
+                                        f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                    )
+                                    error_messages.append(error_message)
+                                    continue                                                                                                 
+                                else:
+                                    error_message = (
+                                        f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 일련 번호가 숫자(특수문자 금지) 또는 신고서류 양식과 일치하지 않습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                    )
+                                    error_messages.append(error_message)                               
                         elif len(temp_data1) > 0:
                             for temp in temp_data1:
                                 if temp in first_row[0]:
@@ -486,7 +604,7 @@ def validate_mat(file_path):
                                             for row in table1:
                                                 if row == None or str(row).strip() == '':
                                                     error_message = (
-                                                        f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                        f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                     )
                                                     error_messages.append(error_message)
                                                     if len(temp_data) > 0 :
@@ -503,7 +621,7 @@ def validate_mat(file_path):
                                             if len(table1) == 6:
                                                 if table1[4] == None or str(table1[4]).strip() == '':
                                                         error_message = (
-                                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                         )
                                                         error_messages.append(error_message)     
                                                 if not (clean_table1[0] == '원재료공통기재사항'):
@@ -512,7 +630,7 @@ def validate_mat(file_path):
                                             elif len(table1) == 3:
                                                 if table1[2] == None or str(table1[2]).strip() == '':
                                                         error_message = (
-                                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                         )
                                                         error_messages.append(error_message)     
                                                 if not (clean_table1[0] == '원재료공통기재사항'):
@@ -522,7 +640,7 @@ def validate_mat(file_path):
                                             if len(table1) == 3:
                                                 if table1[2] == None or str(table1[2]).strip() == '':
                                                         error_message = (
-                                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                         )
                                                         error_messages.append(error_message)
                                                 if not (clean_table1[0] == '원재료물리‧화학정보'):
@@ -531,7 +649,7 @@ def validate_mat(file_path):
                                             elif len(table1) == 6:
                                                 if table1[4] == None or str(table1[4]).strip() == '':
                                                         error_message = (
-                                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                         )
                                                         error_messages.append(error_message)
                                                 if not (clean_table1[0] == '원재료물리‧화학정보'):
@@ -541,7 +659,7 @@ def validate_mat(file_path):
                                             if len(table1) == 3:
                                                 if table1[2] == None or str(table1[2]).strip() == '':
                                                         error_message = (
-                                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                         )
                                                         error_messages.append(error_message)                                  
                                                 if not (clean_table1[0] == '원재료제조자정보'):
@@ -550,7 +668,7 @@ def validate_mat(file_path):
                                             elif  len(table1) == 6:
                                                 if table1[4] == None or str(table1[4]).strip() == '':
                                                         error_message = (
-                                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                            f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                                         )
                                                         error_messages.append(error_message)                                  
                                                 if not (clean_table1[0] == '원재료제조자정보'):
@@ -573,7 +691,7 @@ def validate_mat(file_path):
                                     for row in table1:
                                         if row == None or str(row).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)
                                             if len(temp_data) > 0 :
@@ -589,7 +707,7 @@ def validate_mat(file_path):
                                 elif (len(table1) > 0 and (clean_table1[0] in valid_keywords2 or clean_table1[0] in '원재료공통기재사항')):
                                     if table1[4] == None or str(table1[4]).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)     
                                     if not (clean_table1[0] == '원재료공통기재사항'):
@@ -598,7 +716,7 @@ def validate_mat(file_path):
                                 elif (len(table1) > 0 and (clean_table1[0] in valid_keywords3) or clean_table1[0] in '원재료물리‧화학정보'):
                                     if table1[4] == None or str(table1[4]).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1}\r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1}\r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)
                                     # print(type(clean_table1[0]))                                  
@@ -608,7 +726,7 @@ def validate_mat(file_path):
                                 elif len(table1) > 0 and (clean_table1[0] in valid_keywords4 or clean_table1[0] in '원재료제조자정보'):
                                     if table1[4] == None or str(table1[4]).strip() == '':
                                             error_message = (
-                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                                f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)                                  
                                     if not (clean_table1[0] == '원재료제조자정보'):
@@ -706,4 +824,4 @@ def validate_mat(file_path):
     print(len(error_messages))
     for i in error_messages:
         print(i)
-validate_mat(r"C:\Users\USER\Desktop\검증용자료 50개\검증데이터-51sets\8_벨트형\원재료3.pdf")
+validate_mat(r"C:\Users\USER\Desktop\검증용자료 50개\test\15 - 자가점착형\원재료 15.pdf")

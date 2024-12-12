@@ -140,8 +140,8 @@ def validate_all_docs(folder_path, code):
 
 # 1 : 스타킹형 2 : 벨트형 3 : 자가점착형
 # all_tables, error_messages = validate_all_docs('C:/Users/USER/Desktop/식약처/검증데이터_10sets/1번테스트', 2)    
-folder_list = get_folders(r"C:\Users\USER\Desktop\검증용자료 50개\검증데이터-51sets")
-# folder_list = get_folders(r"C:\Users\USER\Desktop\검증용자료 20개\test")
+# folder_list = get_folders(r"C:\Users\USER\Desktop\검증용자료 50개\검증데이터-51sets")
+folder_list = get_folders(r"C:\Users\USER\Desktop\검증용자료 50개\test")
 print(folder_list)
 all_tables = []
 error_messages = []
@@ -166,7 +166,8 @@ for folder in folder_list:
                     if row != None:
                         error_result.append(row)
             else: error_result.append(errors)
-        save_filepath = fr"C:\Users\USER\Desktop\검증용자료 50개\report/report{num}.hwp"
+        # save_filepath = fr"C:\Users\USER\Desktop\검증용자료 50개\report/report{num}.hwp"
+        save_filepath = fr"C:\Users\USER\Desktop\검증용자료 50개\report_test/report{num}.hwp"
         save_list_to_hwp(save_filepath, error_result)
         kobert_result = []
     all_tables = []
