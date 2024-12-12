@@ -2,10 +2,10 @@ import os
 import re
 import pdfplumber
 # from .forbidden_words import *
-from forbidden_words import *
+from .forbidden_words import *
 import unicodedata
 # from save_error_to_txt import *
-error_messages = []  # 모든 오류 메시지를 저장할 리스트
+
 fixed_header = ['일련번호', '부분품의명칭', '원재료명또는성분명', '규격', '분량', '비고(인체접촉여부및접촉부위첨가목적)']
     # return 들어갈 자리
 fixed_items = [
@@ -142,6 +142,7 @@ def is_float(value):
     except ValueError:
         return False
 def validate_mat(file_path):
+    error_messages = []  # 모든 오류 메시지를 저장할 리스트
     result_tables = []
     all_tables = []
     all_tables1 = []
@@ -503,8 +504,8 @@ def validate_mat(file_path):
         error_messages.append(e)
         # for i in error_messages:
         #     print(i)
-    # return all_tables, error_messages
+    return all_tables, error_messages
 
-    for i in error_messages:
-        print(i)
-validate_mat(r"C:\Users\USER\Desktop\검증용자료 20개\변경후\12 - 벨트형\원재료12.pdf")
+    # for i in error_messages:
+    #     print(i)
+# validate_mat(r"C:\Users\USER\Desktop\검증용자료 20개\변경후\12 - 벨트형\원재료12.pdf")

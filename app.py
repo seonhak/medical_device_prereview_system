@@ -35,7 +35,7 @@ def validate_all_docs(folder_path, code):
     for keyword in keywords :
         if keyword == '외형':
             shape_file = find_pdf_files_with_keyword(folder_path, keyword)
-            print('외형 검증 ==============================')
+            print('============================== 외형 파일 검증 ==============================')
             if len(shape_file) == 0:
                 error_message = (
                     ' [ 외형 파일이 존재하지 않습니다 ] '
@@ -51,7 +51,7 @@ def validate_all_docs(folder_path, code):
                     error_messages.append(f" [ 외형파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '작용원리':
             wp_file = find_pdf_files_with_keyword(folder_path, keyword)
-            print('작용원리 검증 ==============================')
+            print('============================== 작용원리 파일 검증 ==============================')
             if len(wp_file) == 0:
                 error_message=(
                     ' [ 작용원리 파일이 존재하지 않습니다 ] '
@@ -67,7 +67,7 @@ def validate_all_docs(folder_path, code):
                     error_messages.append(f" [ 작용원리파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '치수':
             size_file = find_pdf_files_with_keyword(folder_path, keyword)
-            print('치수 검증 ==============================')
+            print('============================== 치수 파일 검증 ==============================')
             if len(size_file) == 0:
                 error_message = (
                     ' [ 치수 파일이 존재하지 않습니다 ] '
@@ -83,7 +83,7 @@ def validate_all_docs(folder_path, code):
                     error_messages.append(f" [ 치수파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '원재료':
             mat_file = find_pdf_files_with_keyword(folder_path, keyword)
-            print('원재료 검증 ==============================')
+            print('============================== 원재료 파일 검증 ==============================')
             if len(mat_file) == 0:
                 error_message = (
                     ' [ 원재료 파일이 존재하지 않습니다 ]'
@@ -99,7 +99,7 @@ def validate_all_docs(folder_path, code):
                     error_messages.append(f" [ 원재료파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '사용방법':
             usage_file = find_pdf_files_with_keyword(folder_path, keyword)
-            print('사용방법 검증 ==============================')
+            print('============================== 사용방법 파일 검증 ==============================')
             if len(usage_file) == 0:
                 error_message = (
                     ' [ 사용방법 파일이 존재하지 않습니다 ]'
@@ -115,7 +115,7 @@ def validate_all_docs(folder_path, code):
                     error_messages.append(f" [ 사용방법파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '주의사항':
             pfu_file = find_pdf_files_with_keyword(folder_path, keyword)
-            print('주의사항 검증 ==============================')
+            print('============================== 주의사항 파일 검증 ==============================')
             if len(pfu_file) == 0 :
                 error_message = (
                     ' [ 주의사항 파일이 존재하지 않습니다] '
@@ -140,22 +140,12 @@ def validate_all_docs(folder_path, code):
 
 # 1 : 스타킹형 2 : 벨트형 3 : 자가점착형
 # all_tables, error_messages = validate_all_docs('C:/Users/USER/Desktop/식약처/검증데이터_10sets/1번테스트', 2)    
-folder_list = get_folders(r"C:\Users\USER\Desktop\식약처\검증데이터_10sets")
+folder_list = get_folders(r"C:\Users\USER\Desktop\식약처\검증데이터-51sets")
 
-
-<<<<<<< HEAD
-error_result = []
-print("에러메시지 검증 ===========================")
-for errors in error_messages:
-    if errors != None and type(errors) == list:
-        for row in errors:
-            if row != None:
-                error_result.append(row)
-    else: error_result.append(errors)
-
-save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/test_folder/report10.hwp", error_result)
-=======
+all_tables = []
+error_messages = []
 for folder in folder_list:
+    
     num = os.path.basename(folder).split("_")[0]
     if '스타킹' in folder:
         all_tables, error_messages = validate_all_docs(folder, 1)
@@ -164,11 +154,11 @@ for folder in folder_list:
     elif '점착형' in folder:
         all_tables, error_messages = validate_all_docs(folder, 3)
     else:
-        print('폴더명이 맞지 않아요')
+        print('wrong path')
     if all_tables and error_messages:
         
         error_result = []
-        print("에러메시지 검증 ===========================")
+        print("=========================== 보고서 작성 진행 중 ===========================")
         for errors in error_messages:
             if errors != None and type(errors) == list:
                 for row in errors:
@@ -177,25 +167,23 @@ for folder in folder_list:
             else: error_result.append(errors)
         save_filepath = fr"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/hwp_reports/report{num}.hwp"
         save_list_to_hwp(save_filepath, error_result)
-        kobert_result = []
-        print("AI 검증 ===========================")
-        for table in all_tables:
-            if table != None and type(table) == list:
-                temp = ''
-                for row in table:
-                    if row != None and type(row) == str and not clean_text(row) == '':
-                        temp += row
-                kobert_result.append(predict_label(temp))
-            else:
-                if table != None and type(table) == str and not clean_text(table) == '':
-                    kobert_result.append(predict_label(table))
-        print(kobert_result)
-        save_filepath = fr"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/ai_reports/ai_report{num}.hwp"
-        save_list_to_hwp(save_filepath, kobert_result)
-
-
-
-
+        # kobert_result = []
+        # print("AI 검증 ===========================")
+        # for table in all_tables:
+            
+        #     if table and type(table) == list:
+        #         temp = ''
+        #         for row in table:
+        #             if row and type(row) == str and not clean_text(row) == '':
+        #                 temp += row
+                
+        #         kobert_result.append(predict_label(temp))
+        #     else:
+        #         if table and type(table) == str and not clean_text(table) == '':
+        #             kobert_result.append(predict_label(table))
+        # # print(kobert_result)
+        # save_filepath = fr"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/ai_reports/ai_report{num}.hwp"
+        # save_list_to_hwp(save_filepath, kobert_result)
 
 # all_tables, error_messages = validate_all_docs(r'./test_folder', 2)
 
@@ -209,7 +197,7 @@ for folder in folder_list:
 #     else: error_result.append(errors)
 
 # save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/hwp_reports/report.hwp", error_result)
->>>>>>> 86645ff965c49b964f9264e986f602622fba2d6d
+
 
 
 
