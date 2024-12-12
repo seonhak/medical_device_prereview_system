@@ -206,7 +206,12 @@ def validate_mat(file_path):
                                     temp_data1.append(temp_data[3])
                                 elif len(clean_table1) == 1 and not clean_table1[0] in (valid_keywords2 + valid_keywords3 + valid_keywords4):
                                     all_tables2.append(clean_table1)
-                                elif (len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords2) or (len(clean_table1)> 1 and clean_table1[1] in valid_keywords2 or clean_table1[0] in '원재료공통기재사항')):
+                                elif len(table1) > 0 and (
+                                    (len(clean_table1) > 0 and clean_table1[0] in valid_keywords2) or
+                                    (len(clean_table1) > 1 and clean_table1[1] in valid_keywords2) or
+                                    (len(clean_table1) > 0 and clean_table1[0] in '원재료공통기재사항')
+                                ):
+                                # elif len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords2) or (len(clean_table1)> 1 and clean_table1[1] in valid_keywords2 or clean_table1[0] in '원재료공통기재사항'):
                                     if table1[4] == None or str(table1[4]).strip() == '':
                                             error_message = (
                                                 f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
@@ -215,7 +220,14 @@ def validate_mat(file_path):
                                     if len(clean_table1) < 3 and not (clean_table1[0] == '원재료공통기재사항'):
                                         clean_table1.insert(0,'원재료공통기재사항')
                                     all_tables1.append(clean_table1)
-                                elif (len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords3) or (len(clean_table1)>1 and clean_table1[1] in valid_keywords3) or clean_table1[0] in '원재료물리‧화학정보'):
+                                elif (
+                                    len(table1) > 0 and (
+                                        (len(clean_table1) > 0 and clean_table1[0] in valid_keywords3) or
+                                        (len(clean_table1) > 1 and clean_table1[1] in valid_keywords3) or
+                                        (len(clean_table1) > 0 and clean_table1[0] in '원재료물리‧화학정보')
+                                    )
+                                ):                                
+                                # elif (len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords3) or (len(clean_table1)>1 and clean_table1[1] in valid_keywords3) or clean_table1[0] in '원재료물리‧화학정보'):
                                     if table1[4] == None or str(table1[4]).strip() == '':
                                             error_message = (
                                                 f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
@@ -225,7 +237,14 @@ def validate_mat(file_path):
                                     if len(clean_table1) < 3 and not (clean_table1[0] == '원재료물리‧화학정보'):
                                         clean_table1.insert(0,'원재료물리‧화학정보')
                                     all_tables1.append(clean_table1)                                   
-                                elif len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords4) or (len(clean_table1)>1 and clean_table1[1] in valid_keywords4 or clean_table1[0] in '원재료제조자정보'):
+                                elif (
+                                    len(table1) > 0 and (
+                                        (len(clean_table1) > 0 and clean_table1[0] in valid_keywords4) or
+                                        (len(clean_table1) > 1 and clean_table1[1] in valid_keywords4) or
+                                        (len(clean_table1) > 0 and clean_table1[0] in '원재료제조자정보')
+                                    )
+                                ):                                    
+                                # elif len(table1) > 0 and (len(clean_table1)>0 and clean_table1[0] in valid_keywords4) or (len(clean_table1)>1 and clean_table1[1] in valid_keywords4 or clean_table1[0] in '원재료제조자정보'):
                                     if table1[4] == None or str(table1[4]).strip() == '':
                                             error_message = (
                                                 f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
@@ -459,7 +478,7 @@ def validate_mat(file_path):
                                     error_message = (
                                         f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. 해당되지 않는 곳에 해당없음을 기재해주세요. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                     )
-                                    error_messages.append(error_message)
+                                    # error_messages.append(error_message)
                                     continue                                                                                                 
                                 else:
                                     error_message = (
@@ -824,4 +843,4 @@ def validate_mat(file_path):
     print(len(error_messages))
     for i in error_messages:
         print(i)
-validate_mat(r"C:\Users\USER\Desktop\검증용자료 50개\test\15 - 자가점착형\원재료 15.pdf")
+validate_mat(r"C:\Users\USER\Documents\카카오톡 받은 파일\원재료 (2).pdf")
