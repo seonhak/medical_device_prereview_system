@@ -44,6 +44,7 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
                 error_messages.append(
                     f" 신고서류 내 검토필요요사항 내용: {normalized_line} \r\n 검토사항 발생 요인 : 금지 단어 \'{normalized_word}\'(이)가 포함되었습니다 \r\n 검토사항에 대한 근거 : 사용방법 - 규정 제13조(모양 및 구조) 내용 확인이 필요합니다" 
                     )
+    return error_messages
     # # 결과 출력
     # if error_messages:
     #     print("다음과 같은 문제가 발견되었습니다:")
