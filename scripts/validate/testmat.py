@@ -794,12 +794,9 @@ def validate_mat(file_path):
                 if not len(data) == 6 :
                     pass
                 else:
-                    if not data[4].isdigit():
-                        error_message = (
-                                f' 신고서류 내 검토필요사항 : 분량 {a}(이)가 숫자가 아닙니다. \r\n 검토사항 발생 요인 : 일련번호 {b} 분량이 숫자가 아닙니다 \r\n 검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다' 
-                            )
-                        error_messages.append(error_message)
-                    if b == data[0] and data[4].isdigit():
+                    if not is_float(data[4]):
+                        pass
+                    elif b == data[0] and data[4].isdigit():
                         a = a+float(data[4])
                     elif not data[0] == b:
                         if not a == 100.0:
