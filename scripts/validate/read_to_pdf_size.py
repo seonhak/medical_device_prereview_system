@@ -4,6 +4,7 @@ from .save_error_to_txt import save_error_to_file  # 에러 저장 함수
 # 치수
 
 fixed_header = ['번호', '명칭', '치수']
+fixed_header2 = ['번호', '모델명 또는 명칭', '치수 및 중량']
 fixed_header_str = '번호명칭치수'
 def clean_text(text):
     """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
@@ -106,9 +107,9 @@ def validate_size(file_path):
 
                 first_row = normalize_header(table[0])
                 normalized_fixed_header = normalize_header(fixed_header)
-                
+                normalized_fixed_header2 = normalize_header(fixed_header2)
                 # 헤더가 고정된 형식 또는 허용된 헤더 중 하나와 일치하지 않는 경우
-                if first_row != normalized_fixed_header and first_row not in allowed_headers:
+                if first_row != normalized_fixed_header2 and first_row != normalized_fixed_header and first_row not in allowed_headers:
                     error_messages.append(
                         f" 신고서류 내 오류 내용 : 표 {table_idx}: 행이 올바르지 않습니다. \r\n 추출된 행: {table[0]} \r\n 오류 발생 요인 : 치수 양식과 일치하지 않습니다.  \r\n 오류 사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
                     )

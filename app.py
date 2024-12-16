@@ -147,7 +147,7 @@ def validate_all_docs(folder_path, code):
 
 # 1 : 스타킹형 2 : 벨트형 3 : 자가점착형
 
-folder_path = r"C:\Users\USER\Desktop\식약처\검증용데이터_기안문포함"
+folder_path = r"C:\Users\USER\Desktop\식약처\검증용데이터_기안문포함\새 폴더"
 folder_list = get_folders(folder_path)
 
 all_tables = []

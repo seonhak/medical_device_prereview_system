@@ -377,7 +377,7 @@ def validate_mat(file_path):
                                         if table1[3] in (None,''):
                                             clean_table1.insert(3,'검증오류방지')
                                         if table1[4] in (None,''):
-                                            clena_table1.insert(4,float(0))
+                                            clean_table1.insert(4,float(0))
                                         if table1[5] in (None,''):
                                             clean_table1.insert(5,'검증오류방지')
                                             all_tables.append(clean_table1)                                            
