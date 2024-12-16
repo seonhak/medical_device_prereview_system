@@ -9,10 +9,16 @@ def save_list_to_hwp(output_path, content_list):
     hwp.HAction.Execute("NewFile", hwp.HParameterSet.HFileOpenSave.HSet)
 
     # 리스트 내용을 HWP 파일에 추가
-    for content in content_list:
+    if content_list:
+        for content in content_list:
+            hwp.Run("MoveDocEnd")  # 문서 끝으로 이동
+            hwp.HAction.GetDefault("InsertText", hwp.HParameterSet.HInsertText.HSet)
+            hwp.HParameterSet.HInsertText.Text = '\r\n'+content + '\r\n'
+            hwp.HAction.Execute("InsertText", hwp.HParameterSet.HInsertText.HSet)
+    else:
         hwp.Run("MoveDocEnd")  # 문서 끝으로 이동
         hwp.HAction.GetDefault("InsertText", hwp.HParameterSet.HInsertText.HSet)
-        hwp.HParameterSet.HInsertText.Text = '\r\n'+content + '\r\n'
+        hwp.HParameterSet.HInsertText.Text = '검토필요사항을 발견하지 못했습니다.' + '\r\n'
         hwp.HAction.Execute("InsertText", hwp.HParameterSet.HInsertText.HSet)
         
 
