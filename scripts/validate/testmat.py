@@ -187,10 +187,11 @@ def validate_mat(file_path):
                                 if len(clean_table1)>0 and clean_table1[0].isdigit():
                                     for row in table1:
                                         if row == None or str(row).strip() == '':
-                                            error_message = (
-                                                f' 신고서류 내 검토필요사항 : {table1}\r\n 검토사항 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
-                                            )
-                                            error_messages.append(error_message)
+                                            pass
+                                            # error_message = (
+                                            #     f' 신고서류 내 검토필요사항 : {table1}\r\n 검토사항 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                            # )
+                                            # error_messages.append(error_message)
                                             if len(temp_data) > 0 :
                                                 if table1[5] == None or str(table1[5]).strip() =='':
                                                     clean_table1.insert(5,temp_data[5])
@@ -277,6 +278,7 @@ def validate_mat(file_path):
                                         else:
                                             all_tables.append(clean_table1)
                                     elif any('검증오류방지' in item for item in clean_table1):
+                                        
                                         error_message = (
                                          f' 신고서류 내 검토필요사항 : {table1} \r\n 검토사항 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'   
                                         )
@@ -286,10 +288,11 @@ def validate_mat(file_path):
                                 elif table1[0] == '일련번호':
                                     continue
                                 elif len(clean_table1) == 0:
-                                    error_message = (
-                                        f' 신고서류 내 검토필요사항 : {table1} \r\n 검토사항 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. \r\n 검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
-                                    )
-                                    error_messages.append(error_message)
+                                    pass
+                                    # error_message = (
+                                    #     f' 신고서류 내 검토필요사항 : {table1} \r\n 검토사항 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. \r\n 검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                    # )
+                                    # error_messages.append(error_message)
                                     continue
                                 # 분기 추가
                                 elif isinstance(table1[0],str):
@@ -476,9 +479,9 @@ def validate_mat(file_path):
                                 elif table1[0] == '일련번호':
                                     continue        
                                 elif len(clean_table1) == 0:
-                                    error_message = (
-                                        f' 신고서류 내 검토필요사항 : {table1} \r\n 검토사항 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. \r\n 검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
-                                    )
+                                    # error_message = (
+                                    #     f' 신고서류 내 검토필요사항 : {table1} \r\n 검토사항 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. \r\n 검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                    # )
                                     # error_messages.append(error_message)
                                     continue                                                                                                 
                                 else:
@@ -772,10 +775,10 @@ def validate_mat(file_path):
                             )
                             error_messages.append(error_message)
                     except IndexError:
-                        error_message = (
-                                f' 신고서류 내 검토필요사항 : {table1}  \r\n 검토사항 발생 요인 : 데이터를 읽을 수 없습니다. \r\n 검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
-                            )
-                        error_messages.append(error_message)
+                        # error_message = (
+                        #         f' 신고서류 내 검토필요사항 : {table1}  \r\n 검토사항 발생 요인 : 데이터를 읽을 수 없습니다. \r\n 검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                        #     )
+                        # error_messages.append(error_message)
                         pass
         if len(all_tables) == 0:
             error_message =(
@@ -807,7 +810,7 @@ def validate_mat(file_path):
                             # a 초기화
                         if is_float(data[4]):
                             a = float(data[4])
-                            b = data[0]  
+                            b = data[0]
                         else:
                             pass
             if not a == 100.0:

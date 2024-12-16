@@ -270,7 +270,7 @@ def validate_mat(file_path):
                                         if table1[3] in (None,''):
                                             clean_table1.insert(3,'검증오류방지')
                                         if table1[4] in (None,''):
-                                            clena_table1.insert(4,float(0))
+                                            clean_table1.insert(4,float(0))
                                         if table1[5] in (None,''):
                                             clean_table1.insert(5,'검증오류방지')
                                             all_tables.append(clean_table1)                                            
@@ -278,7 +278,7 @@ def validate_mat(file_path):
                                             all_tables.append(clean_table1)
                                     elif any('검증오류방지' in item for item in clean_table1):
                                         error_message = (
-                                         f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'   
+                                        f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'   
                                         )
                                         error_messages.append(error_message)
                                     else:
@@ -286,10 +286,10 @@ def validate_mat(file_path):
                                 elif table1[0] == '일련번호':
                                     continue
                                 elif len(clean_table1) == 0:
-                                    error_message = (
-                                        f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
-                                    )
-                                    error_messages.append(error_message)
+                                    # error_message = (
+                                    #     f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
+                                    # )
+                                    # error_messages.append(error_message)
                                     continue
                                 # 분기 추가
                                 elif isinstance(table1[0],str):
@@ -844,4 +844,4 @@ def validate_mat(file_path):
     print(len(error_messages))
     for i in error_messages:
         print(i)
-validate_mat(r"C:\Users\USER\Desktop\검증용데이터_기안문포함\07_20230081956_스타킹형\원재료.pdf")
+validate_mat(r"C:\Users\USER\Desktop\식약처\검증용데이터_기안문포함\25_20240106259_스타킹형\원재료.pdf")
