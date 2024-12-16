@@ -616,7 +616,7 @@ def validate_mat(file_path):
                                     )
                                     error_messages.append(error_message)                               
                         elif len(temp_data1) > 0:
-                            for temp in temp_data1:
+                            for temp in temp_data:
                                 if temp in first_row[0]:
                                     for table1 in tables:
                                         clean_table1 = clean_and_filter_list(table1)
@@ -704,7 +704,7 @@ def validate_mat(file_path):
                                                 f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 신고서류 양식과 일치하지 않습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                             )
                                             error_messages.append(error_message)    
-                        elif  ('접촉' in item for item in first_row):
+                        elif('접촉' in item for item in first_row):
                             for table1 in tables[2:]:
                                 clean_table1 = clean_and_filter_list(table1)
                                 if clean_table1[0].isdigit():
@@ -844,4 +844,4 @@ def validate_mat(file_path):
     print(len(error_messages))
     for i in error_messages:
         print(i)
-validate_mat(r"C:\Users\USER\Desktop\report")
+validate_mat(r"C:\Users\USER\Desktop\검증용데이터_기안문포함\07_20230081956_스타킹형\원재료.pdf")
