@@ -68,7 +68,7 @@ def validate_shape(file_path):
     """PDF 파일을 읽고 딕셔너리를 기반으로 검증."""
     all_tables = []
     error_messages = []
-    
+
     with pdfplumber.open(file_path) as pdf:
         for page_number, page in enumerate(pdf.pages, start=1):
             # print(f"페이지 {page_number} 처리 중...")
@@ -86,13 +86,6 @@ def validate_shape(file_path):
                     "외관사진" in clean_text(cell) or "외관설명" in clean_text(cell)
                     for cell in table[0]
                 )
-
-                # if not contains_exterior_info and first_row != normalized_fixed_header:
-                #     error_messages.append(
-                #         f"페이지 {page_number}: 첫 번째 행이 fixed_header와 일치하지 않음. 행: {table[0]}"
-                #     )
-
-                # 딕셔너리 변환
                 dict_data = table_to_dict(table)
                 
                 for row in table :

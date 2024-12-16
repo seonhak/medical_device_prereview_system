@@ -810,7 +810,7 @@ def validate_mat(file_path):
                             pass
             if not a == 100.0:
                 error_message = (
-                    f' 신고서류 내 오류 내용 : 일련번호 {b}의 분량 합 : {a}% \r\n 오류 발생 요인 : 일련번호 {b} 분량 합이 100%가 되지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다' 
+                    f' 신고서류 내 검토필요요사항 내용 : 일련번호 {b}의 분량 합 : {a}% \r\n 검토사항 발생 요인 : 일련번호 {b} 분량 합이 100%가 되지 않았습니다 \r\n 검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다' 
                 )
                 error_messages.append(error_message)
                 # a 초기화
@@ -824,7 +824,7 @@ def validate_mat(file_path):
             # b = data[0]          
         else :
             error_message = (
-                f' 신고서류 내 오류 내용: 원재료 합을 구할 수 없습니다  \r\n 오류 발생 요인 : 일련번호 또는 분량이 숫자로만 이루어지지 않았습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조 내용 확인이 필요합니다'
+                f' 신고서류 내 검토필요요사항 내용: 원재료 합을 구할 수 없습니다  \r\n 검토사항 발생 요인 : 일련번호 또는 분량이 숫자로만 이루어지지 않았습니다 \r\n 검토사항에 대한 근거 : 원재료 - 규정 제10조 내용 확인이 필요합니다'
             )
             error_messages.append(error_message)      
         # 사용 불가 단어 검증 로직 #
@@ -844,4 +844,4 @@ def validate_mat(file_path):
     print(len(error_messages))
     for i in error_messages:
         print(i)
-validate_mat(r"C:\Users\USER\Documents\카카오톡 받은 파일\원재료 29.pdf")
+validate_mat(r"C:\Users\USER\Desktop\report")
