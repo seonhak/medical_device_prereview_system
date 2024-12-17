@@ -36,7 +36,7 @@ def validate_all_docs(folder_path, code):
     for keyword in keywords :
         if keyword == '외형':
             shape_file = find_pdf_files_with_keyword(folder_path, keyword)
-            print('외형 검증 ==============================')
+            print('============================== 외형 파일 검증 ==============================')
             if len(shape_file) == 0:
                 error_message = (
                     ' [ 외형 파일이 존재하지 않습니다 ] '
@@ -53,7 +53,7 @@ def validate_all_docs(folder_path, code):
                 #     error_messages.append(f" [ 외형파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '작용원리':
             wp_file = find_pdf_files_with_keyword(folder_path, keyword)
-            print('작용원리 검증 ==============================')
+            print('============================== 작용원리 파일 검증 ==============================')
             if len(wp_file) == 0:
                 error_message=(
                     ' [ 작용원리 파일이 존재하지 않습니다 ] '
@@ -70,7 +70,7 @@ def validate_all_docs(folder_path, code):
                 #     error_messages.append(f" [ 작용원리파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '치수':
             size_file = find_pdf_files_with_keyword(folder_path, keyword)
-            print('치수 검증 ==============================')
+            print('============================== 치수 파일 검증 ==============================')
             if len(size_file) == 0:
                 error_message = (
                     ' [ 치수 파일이 존재하지 않습니다 ] '
@@ -87,7 +87,7 @@ def validate_all_docs(folder_path, code):
                 #     error_messages.append(f" [ 치수파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '원재료':
             mat_file = find_pdf_files_with_keyword(folder_path, keyword)
-            print('원재료 검증 ==============================')
+            print('============================== 원재료 파일 검증 ==============================')
             if len(mat_file) == 0:
                 error_message = (
                     ' [ 원재료 파일이 존재하지 않습니다 ]'
@@ -104,7 +104,7 @@ def validate_all_docs(folder_path, code):
                 #     error_messages.append(f" [ 원재료파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '사용방법':
             usage_file = find_pdf_files_with_keyword(folder_path, keyword)
-            print('사용방법 검증 ==============================')
+            print('============================== 사용방법 파일 검증 ==============================')
             if len(usage_file) == 0:
                 error_message = (
                     ' [ 사용방법 파일이 존재하지 않습니다 ]'
@@ -121,7 +121,7 @@ def validate_all_docs(folder_path, code):
                 #     error_messages.append(f" [ 사용방법파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '주의사항':
             pfu_file = find_pdf_files_with_keyword(folder_path, keyword)
-            print('주의사항 검증 ==============================')
+            print('============================== 주의사항 파일 검증 ==============================')
             if len(pfu_file) == 0 :
                 error_message = (
                     ' [ 주의사항 파일이 존재하지 않습니다] '
@@ -146,7 +146,6 @@ def validate_all_docs(folder_path, code):
 # 결과 변수를 직접 받는게 아니라, 결과를 출력하면 ProcessBuilder로 출력한 결과를 읽어오는 방식
 
 # 1 : 스타킹형 2 : 벨트형 3 : 자가점착형
-
 folder_path = r"C:\Users\USER\Desktop\식약처\검증용데이터_기안문포함\새 폴더"
 folder_list = get_folders(folder_path)
 
@@ -157,6 +156,7 @@ no_error_files = []
 # TODO 규칙 기반 검증 후 에러 메시지가 없는 파일은 KoBERT 검증을 통해 생성된 에러 메시지를 저장
 # error messages로 받는게 아닌, 형태 별 에러메시지를 따로 저장해서 return 받을 것
 for folder in folder_list:
+    
     num = os.path.basename(folder).split("_")[0]
     if '스타킹' in folder:
         all_tables, error_messages, no_error_files = validate_all_docs(folder, 1)
@@ -193,6 +193,5 @@ for folder in folder_list:
         #     else:
         #         if table != None and type(table) == str and not clean_text(table) == '':
         #             kobert_result.append(predict_label(table))
-        
         # save_filepath = folder + fr"/report{num}.hwp"
         # save_list_to_hwp(save_filepath, kobert_result)
