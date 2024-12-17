@@ -36,26 +36,26 @@ def validate_dict_data(dict_data, forbidden_words):
         else:
             if not item['번호'].isdigit():
                 row_errors.append(
-                    f" 신고서류 내 오류 내용: {item['번호']} \r\n 오류 발생 요인 : 잘못된 데이터 형식이 발견되었습니다.('번호'가 숫자가 아님) \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
+                    f" 신고서류 내 검토필요사항 : {item['번호']} \r\n 검토사항 발생 요인 : 잘못된 데이터 형식이 발견되었습니다.('번호'가 숫자가 아님) \r\n 검토사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
                     )
             # "명칭" 검증
             if not item['명칭']:
-                row_errors.append(f"신고 서류 오류 내용 : '명칭'이 비어 있음 \r\n 오류 발생 요인 : 잘못된 데이터 형식이 발견되었습니다. \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다")
+                row_errors.append(f"신고 서류 내 검토필요사항 : {item['명칭']} \r\n 검토사항 발생 요인 : '명칭'이 비어 있습니다.  \r\n 검토사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다")
             else:
                 for word in forbidden_words:
                     if word in item['명칭']:
                         row_errors.append(
-                            f" 신고서류 내 오류 내용: {item['명칭']} \r\n 오류 발생 요인 : 사용 불가 단어 {word} 확인되었습니다. \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"                         
+                            f" 신고서류 내 검토필요사항 내용 : {item['명칭']} \r\n 검토사항 발생 요인 : 사용 불가 단어 \'{word}\'(이)가 확인되었습니다. \r\n 검토사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"                         
                             )
 
             # "기능 및 역할" 검증
             if not item['기능 및 역할']:
-                row_errors.append(f"신고 서류 오류 내용 : '기능 및 역할'이 비어 있음 \r\n 오류 발생 요인 : 잘못된 데이터 형식이 발견되었습니다. \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다")
+                row_errors.append(f"신고서류 내 검토필요사항 내용 : {item['기능 및 역할']} \r\n 검토사항 발생 요인 : '기능 및 역할'이 비어 있음 \r\n 검토사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다")
             else:
                 for word in forbidden_words:
                     if word in item['기능 및 역할']:
                         row_errors.append(
-                            f" 신고서류 내 오류 내용: {item['기능 및 역할']} \r\n 오류 발생 요인 : 사용 불가 단어 {word} 확인되었습니다. \r\n 오류 사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"                         
+                            f" 신고서류 내 검토필요사항 내용: {item['기능 및 역할']} \r\n 검토사항 발생 요인 : 사용 불가 단어 \'{word}\'(이)가 확인되었습니다. \r\n 검토사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"                         
                             )
 
         if row_errors:
@@ -68,7 +68,7 @@ def validate_shape(file_path):
     """PDF 파일을 읽고 딕셔너리를 기반으로 검증."""
     all_tables = []
     error_messages = []
-    
+
     with pdfplumber.open(file_path) as pdf:
         for page_number, page in enumerate(pdf.pages, start=1):
             # print(f"페이지 {page_number} 처리 중...")
@@ -86,13 +86,6 @@ def validate_shape(file_path):
                     "외관사진" in clean_text(cell) or "외관설명" in clean_text(cell)
                     for cell in table[0]
                 )
-
-                # if not contains_exterior_info and first_row != normalized_fixed_header:
-                #     error_messages.append(
-                #         f"페이지 {page_number}: 첫 번째 행이 fixed_header와 일치하지 않음. 행: {table[0]}"
-                #     )
-
-                # 딕셔너리 변환
                 dict_data = table_to_dict(table)
                 
                 for row in table :

@@ -1,8 +1,8 @@
 import os
 import re
 import pdfplumber
-from .forbidden_words import *
-# from forbidden_words import *
+# from .forbidden_words import *
+from forbidden_words import *
 import unicodedata
 # from save_error_to_txt import *
 
@@ -881,4 +881,8 @@ def validate_mat(file_path):
         error_messages.append(error_message)
     except Exception as e:
         error_messages.append(e)
-    return all_tables, error_messages
+    # return all_tables, error_messages
+
+    for i in error_messages:
+        print(i)
+validate_mat(r"C:\Users\USER\Desktop\검증용데이터_기안문포함\46_20230051916 _스타킹형\원재료.pdf")

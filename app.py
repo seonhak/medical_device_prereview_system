@@ -32,6 +32,7 @@ def validate_all_docs(folder_path, code):
     mat_table = []
     usage_table = []
     pfu_table = []
+    no_error_files = []
     for keyword in keywords :
         if keyword == '외형':
             shape_file = find_pdf_files_with_keyword(folder_path, keyword)
@@ -45,10 +46,11 @@ def validate_all_docs(folder_path, code):
                 shape_table, shape_error = validate_shape(shape_file[0])
                 all_tables.append(shape_table)
                 if(type(shape_error) != type(None) and len(shape_error) != 0):
-                    error_messages.append(f" [ 외형파일에 문제가 검출되었습니다. 오류 검출 개수 : {len(shape_error)} ] ")
+                    error_messages.append(f" [ 외형파일에 검토사항이 검출되었습니다. 오류 검출 개수 : {len(shape_error)} ] ")
                     error_messages.append(shape_error)
                 else:
-                    error_messages.append(f" [ 외형파일에서 문제가 검출되지 않습니다. ] ")
+                    no_error_files.append('shape')
+                #     error_messages.append(f" [ 외형파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '작용원리':
             wp_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('============================== 작용원리 파일 검증 ==============================')
@@ -61,10 +63,11 @@ def validate_all_docs(folder_path, code):
                 wp_table, wp_error = validate_wp(wp_file[0], code)
                 all_tables.append(wp_table)
                 if(type(wp_error) != type(None) and len(wp_error) != 0):
-                    error_messages.append(f" [ 작용원리파일에 문제가 검출되었습니다. 오류 검출 개수 : {len(wp_error)} ] ")
+                    error_messages.append(f" [ 작용원리파일에 검토사항이 검출되었습니다. 오류 검출 개수 : {len(wp_error)} ] ")
                     error_messages.append(wp_error)   
                 else:
-                    error_messages.append(f" [ 작용원리파일에서 문제가 검출되지 않습니다. ] ")
+                    no_error_files.append('wp')
+                #     error_messages.append(f" [ 작용원리파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '치수':
             size_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('============================== 치수 파일 검증 ==============================')
@@ -77,10 +80,11 @@ def validate_all_docs(folder_path, code):
                 size_table, size_error = validate_size(size_file[0])
                 all_tables.append(size_table)
                 if(type(size_error) != type(None) and len(size_error) != 0):
-                    error_messages.append(f" [ 치수파일에 문제가 검출되었습니다. 오류 검출 개수 : {len(size_error)} ] ")
+                    error_messages.append(f" [ 치수파일에 검토사항이 검출되었습니다. 오류 검출 개수 : {len(size_error)} ] ")
                     error_messages.append(size_error)
                 else:
-                    error_messages.append(f" [ 치수파일에서 문제가 검출되지 않습니다. ] ")
+                    no_error_files.append('size')
+                #     error_messages.append(f" [ 치수파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '원재료':
             mat_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('============================== 원재료 파일 검증 ==============================')
@@ -93,10 +97,11 @@ def validate_all_docs(folder_path, code):
                 mat_table, mat_error = validate_mat(mat_file[0])
                 all_tables.append(mat_table)
                 if(type(mat_error) != type(None) and len(mat_error) != 0):
-                    error_messages.append(f" [ 원재료파일에 문제가 검출되었습니다. 오류 검출 개수 : {len(mat_error)} ] ")
+                    error_messages.append(f" [ 원재료파일에 검토사항이 검출되었습니다. 오류 검출 개수 : {len(mat_error)} ] ")
                     error_messages.append(mat_error)
                 else:
-                    error_messages.append(f" [ 원재료파일에서 문제가 검출되지 않습니다. ] ")
+                    no_error_files.append('mat')
+                #     error_messages.append(f" [ 원재료파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '사용방법':
             usage_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('============================== 사용방법 파일 검증 ==============================')
@@ -109,10 +114,11 @@ def validate_all_docs(folder_path, code):
                 usage_table, usage_error = validate_usage(usage_file[0], code)
                 all_tables.append(usage_table)
                 if(type(usage_error) != type(None) and len(usage_error) != 0):
-                    error_messages.append(f" [ 사용방법파일에 문제가 검출되었습니다. 오류 검출 개수 : {len(usage_error)} ] ")
+                    error_messages.append(f" [ 사용방법파일에 검토사항이 검출되었습니다. 오류 검출 개수 : {len(usage_error)} ] ")
                     error_messages.append(usage_error)
                 else:
-                    error_messages.append(f" [ 사용방법파일에서 문제가 검출되지 않습니다. ] ")
+                    no_error_files.append('usage')
+                #     error_messages.append(f" [ 사용방법파일에서 문제가 검출되지 않습니다. ] ")
         elif keyword == '주의사항':
             pfu_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('============================== 주의사항 파일 검증 ==============================')
@@ -125,98 +131,67 @@ def validate_all_docs(folder_path, code):
                 pfu_table, pfu_error = validate_pfu(pfu_file[0], code)
                 all_tables.append(pfu_table)
                 if(type(pfu_error) != type(None) and len(pfu_error) != 0):
-                    error_messages.append(f" [ 주의사항파일에 문제가 검출되었습니다. 오류 검출 개수 : {len(pfu_error)} ] ")
+                    error_messages.append(f" [ 주의사항파일에 검토사항이 검출되었습니다. 검출 개수 : {len(pfu_error)} ] ")
                     error_messages.append(pfu_error)
                 else:
-                    error_messages.append(f" [ 주의사항파일에서 문제가 검출되지 않습니다. ] ")
+                    no_error_files.append('pfu')
+                #     error_messages.append(f" [ 주의사항파일에서 문제가 검출되지 않습니다. ] ")
         else:
             print()
-    
-    return all_tables, error_messages
+    return all_tables, error_messages, no_error_files
+# return shape_table, shape_error, size_table, size_error, mat_table, mat_error, wp_table, wp_error, usage_table, usage_error, pfu_table, pfu_error
 
 # spring boot 내부에서 ProcessBuilder를 통해 cmd처럼 커맨드를 실행해 app.py를 실행
 # 서버 환경에 따라서 호출 방식과 환경변수 삽입 등이 달라질 수 있음
 # 결과 변수를 직접 받는게 아니라, 결과를 출력하면 ProcessBuilder로 출력한 결과를 읽어오는 방식
 
 # 1 : 스타킹형 2 : 벨트형 3 : 자가점착형
-# all_tables, error_messages = validate_all_docs('C:/Users/USER/Desktop/식약처/검증데이터_10sets/1번테스트', 2)    
-folder_list = get_folders(r"C:\Users\USER\Desktop\식약처\검증데이터-51sets")
+folder_path = r"C:\Users\USER\Desktop\식약처\검증용데이터_기안문포함\새 폴더"
+folder_list = get_folders(folder_path)
 
 all_tables = []
 error_messages = []
+no_error_files = []
+
+# TODO 규칙 기반 검증 후 에러 메시지가 없는 파일은 KoBERT 검증을 통해 생성된 에러 메시지를 저장
+# error messages로 받는게 아닌, 형태 별 에러메시지를 따로 저장해서 return 받을 것
 for folder in folder_list:
     
     num = os.path.basename(folder).split("_")[0]
     if '스타킹' in folder:
-        all_tables, error_messages = validate_all_docs(folder, 1)
+        all_tables, error_messages, no_error_files = validate_all_docs(folder, 1)
     elif '벨트형' in folder:
-        all_tables, error_messages = validate_all_docs(folder, 2)
+        all_tables, error_messages, no_error_files = validate_all_docs(folder, 2)
     elif '점착형' in folder:
-        all_tables, error_messages = validate_all_docs(folder, 3)
+        all_tables, error_messages, no_error_files = validate_all_docs(folder, 3)
     else:
-        print('wrong path')
-    if all_tables and error_messages:
-        
+        print('폴더명이 맞지 않아요')
+    
+    if error_messages:
+        print("에러 검증 진행 중===========================")
         error_result = []
-        print("=========================== 보고서 작성 진행 중 ===========================")
         for errors in error_messages:
             if errors != None and type(errors) == list:
                 for row in errors:
                     if row != None:
                         error_result.append(row)
             else: error_result.append(errors)
-        save_filepath = fr"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/hwp_reports/report{num}.hwp"
+        save_filepath = folder + fr"/report{num}.hwp"
         save_list_to_hwp(save_filepath, error_result)
+    elif not error_messages and no_error_files :
+        pass
+        # for no_error_file in no_error_files:
+        #     pass
         # kobert_result = []
-        # print("AI 검증 ===========================")
         # for table in all_tables:
-            
-        #     if table and type(table) == list:
+        #     if table != None and type(table) == list:
         #         temp = ''
         #         for row in table:
-        #             if row and type(row) == str and not clean_text(row) == '':
+        #             if row != None and type(row) == str and not clean_text(row) == '':
         #                 temp += row
-                
         #         kobert_result.append(predict_label(temp))
         #     else:
-        #         if table and type(table) == str and not clean_text(table) == '':
+        #         if table != None and type(table) == str and not clean_text(table) == '':
         #             kobert_result.append(predict_label(table))
-        # # print(kobert_result)
-        # save_filepath = fr"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/ai_reports/ai_report{num}.hwp"
+        # save_filepath = folder + fr"/report{num}.hwp"
         # save_list_to_hwp(save_filepath, kobert_result)
-
-# all_tables, error_messages = validate_all_docs(r'./test_folder', 2)
-
-# error_result = []
-# print("에러메시지 검증 ===========================")
-# for errors in error_messages:
-#     if errors != None and type(errors) == list:
-#         for row in errors:
-#             if row != None:
-#                 error_result.append(row)
-#     else: error_result.append(errors)
-
-# save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/hwp_reports/report.hwp", error_result)
-
-
-
-
-# kobert_result = []
-# print("AI 검증 ===========================")
-
-# for table in all_tables:
-#     if table != None and type(table) == list:
-#         temp = ''
-#         for row in table:
-#             if row != None and type(row) == str and not clean_text(row) == '':
-#                 temp += row
-#                 # print(row)
-        
-#         kobert_result.append(predict_label(temp))
-#     else:
-#         if table != None and type(table) == str and not clean_text(table) == '':
-#             kobert_result.append(predict_label(table))
-#                 # print(table)
-# print(kobert_result)
-# save_list_to_hwp(r"C:/Users/USER/Desktop/식약처/medical_device_prereview_system/hwp_reports/kobert_report.hwp", kobert_result)
-

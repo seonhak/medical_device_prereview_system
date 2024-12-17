@@ -1,6 +1,6 @@
 import pdfplumber
 import os
-from scripts.models.predict_label import predict_label
+# from scripts.models.predict_label import predict_label
 from scripts.validate.write_hwp_report import *
 from scripts.validate.testmat import *
 from scripts.validate.read_to_pdf_pfu import *
