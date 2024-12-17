@@ -38,7 +38,7 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
     # 필수 문장이 하나도 포함되지 않은 경우 에러 메시지 추가
     if not found_required_phrase:
         error_messages.append(
-            f" 신고서류 내 검토필요요사항 내용: {data} \r\n 검토사항 발생 요인 : 필수 문장이 하나도 포함되지 않았습니다. \r\n 검토사항에 대한 근거 : 사용방법 - 규정 제13조(모양 및 구조) 내용 확인이 필요합니다"
+            f" 신고서류 내 검토필요사항 내용: {data} \r\n 검토사항 발생 요인 : 필수 문장이 하나도 포함되지 않았습니다. \r\n 검토사항에 대한 근거 : 사용방법 - 규정 제13조(모양 및 구조) 내용 확인이 필요합니다"
         )
 
     # 금지 단어 포함 여부 확인
@@ -49,7 +49,7 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
             normalized_word = normalize_text(word_pattern)  # 금지 단어 정규화
             if re.search(normalized_word, normalized_line):
                 error_messages.append(
-                    f" 신고서류 내 검토필요요사항 내용: {normalized_line} \r\n 검토사항 발생 요인 : 금지 단어 \'{normalized_word}\'(이)가 포함되었습니다 \r\n 검토사항에 대한 근거 : 사용방법 - 규정 제13조(모양 및 구조) 내용 확인이 필요합니다" 
+                    f" 신고서류 내 검토필요사항 내용: {normalized_line} \r\n 검토사항 발생 요인 : 금지 단어 \'{normalized_word}\'(이)가 포함되었습니다 \r\n 검토사항에 대한 근거 : 사용방법 - 규정 제13조(모양 및 구조) 내용 확인이 필요합니다" 
                     )
     return error_messages
     # # 결과 출력

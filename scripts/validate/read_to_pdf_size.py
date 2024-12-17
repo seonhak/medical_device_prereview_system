@@ -102,7 +102,7 @@ def validate_size(file_path):
                 # 첫 번째 행 (헤더) 검증
                 if not table or not table[0]:
                     error_messages.append(
-                        f" 신고서류 내 오류 내용 : 표 {table_idx}: 행이 비어 있습니다 \r\n 오류 발생 요인 : 치수 양식과 일치하지 않습니다.  \r\n 오류 사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
+                        f" 신고서류 내 검토필요사항 내용 : 표 {table_idx}: 행이 비어 있습니다 \r\n 검토사항 발생 요인 : 치수 양식과 일치하지 않습니다.  \r\n 검토사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
                     )
                     continue
 
