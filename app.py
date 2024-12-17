@@ -50,9 +50,9 @@ def validate_all_docs(folder_path, code):
                     error_messages.append(shape_error)
                 elif len(shape_error) == 0:
                     label = predict_label(get_text_from_pdf(shape_file[0]))
-                    if label == 1:
-                        error_messages.append(" [ 외형파일에 검토사항이 검출되었습니다. ] ")
-                        error_messages.append('검토사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다')
+                    # if label == 1:
+                        # error_messages.append(" [ 외형파일에 검토사항이 검출되었습니다. ] ")
+                        # error_messages.append('검토사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다')
         elif keyword == '작용원리':
             wp_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('============================== 작용원리 파일 검증 ==============================')
@@ -70,9 +70,9 @@ def validate_all_docs(folder_path, code):
                     error_messages.append(wp_error)
                 elif len(wp_error) == 0:
                     label = predict_label(get_text_from_pdf(wp_file[0]))
-                    if label == 1:
-                        error_messages.append(' [ 작용원리파일에 검토사항이 검출되었습니다. ] ')
-                        error_messages.append('검토사항에 대한 근거 : 작용원리 - 규정 제12조 내용 확인이 필요합니다')
+                    # if label == 1:
+                        # error_messages.append(' [ 작용원리파일에 검토사항이 검출되었습니다. ] ')
+                        # error_messages.append('검토사항에 대한 근거 : 작용원리 - 규정 제12조 내용 확인이 필요합니다')
         elif keyword == '치수':
             size_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('============================== 치수 파일 검증 ==============================')
@@ -90,9 +90,9 @@ def validate_all_docs(folder_path, code):
                     error_messages.append(size_error)
                 elif len(size_error) == 0:
                     label = predict_label(get_text_from_pdf(size_file[0]))
-                    if label == 1:
-                        error_messages.append('[ 치수파일일에 검토사항이 검출되었습니다. ]')
-                        error_messages.append('검토사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다')
+                    # if label == 1:
+                        # error_messages.append('[ 치수파일일에 검토사항이 검출되었습니다. ]')
+                        # error_messages.append('검토사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다')
         elif keyword == '원재료':
             mat_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('============================== 원재료 파일 검증 ==============================')
@@ -109,9 +109,9 @@ def validate_all_docs(folder_path, code):
                     error_messages.append(mat_error)
                 elif len(mat_error) == 0:
                     label = predict_label(get_text_from_pdf(mat_file))
-                    if label == 1:
-                        error_messages.append('[ 원재료파일일에 검토사항이 검출되었습니다. ]')
-                        error_messages.append('검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다')
+                    # if label == 1:
+                        # error_messages.append('[ 원재료파일일에 검토사항이 검출되었습니다. ]')
+                        # error_messages.append('검토사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다')
         elif keyword == '사용방법':
             usage_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('============================== 사용방법 파일 검증 ==============================')
@@ -128,9 +128,9 @@ def validate_all_docs(folder_path, code):
                     error_messages.append(usage_error)
                 elif len(usage_error) == 0:
                     label = predict_label(get_text_from_pdf(usage_file[0]))
-                    if label == 1:
-                        error_messages.append('[ 사용방법파일에 검토사항이 검출되었습니다. ]')
-                        error_messages.append('검토사항에 대한 근거 : 사용방법 - 규정 제13조(모양 및 구조) 내용 확인이 필요합니다')
+                    # if label == 1:
+                    #     error_messages.append('[ 사용방법파일에 검토사항이 검출되었습니다. ]')
+                    #     error_messages.append('검토사항에 대한 근거 : 사용방법 - 규정 제13조(모양 및 구조) 내용 확인이 필요합니다')
         elif keyword == '주의사항':
             pfu_file = find_pdf_files_with_keyword(folder_path, keyword)
             print('============================== 주의사항 파일 검증 ==============================')
@@ -147,9 +147,9 @@ def validate_all_docs(folder_path, code):
                     error_messages.append(pfu_error)
                 elif len(pfu_error) == 0:
                     label = predict_label(get_text_from_pdf(pfu_file[0]))
-                    if label == 1:
-                        error_messages.append('[ 주의사항파일에 검토사항이 검출되었습니다. ]')
-                        error_messages.append('검토사항에 대한 근거 : 사용 시 주의사항 - 규정 제14조 내용 확인이 필요합니다')
+                    # if label == 1:
+                    #     error_messages.append('[ 주의사항파일에 검토사항이 검출되었습니다. ]')
+                    #     error_messages.append('검토사항에 대한 근거 : 사용 시 주의사항 - 규정 제14조 내용 확인이 필요합니다')
         else:
             pass
     return all_tables, error_messages, no_error_files
