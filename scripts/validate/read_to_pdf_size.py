@@ -1,5 +1,6 @@
 import pdfplumber
 from .forbidden_words import forbidden_words  # 금지 단어 리스트
+# from forbidden_words import forbidden_words
 from .save_error_to_txt import save_error_to_file  # 에러 저장 함수
 # 치수
 
@@ -110,12 +111,16 @@ def validate_size(file_path):
                 normalized_fixed_header2 = normalize_header(fixed_header2)
                 # 헤더가 고정된 형식 또는 허용된 헤더 중 하나와 일치하지 않는 경우
                 if first_row != normalized_fixed_header2 and first_row != normalized_fixed_header and first_row not in allowed_headers:
-                    error_messages.append(
-                        f" 신고서류 내 오류 내용 : 표 {table_idx}: 행이 올바르지 않습니다. \r\n 추출된 행: {table[0]} \r\n 오류 발생 요인 : 치수 양식과 일치하지 않습니다.  \r\n 오류 사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
-                    )
-                    validation_stopped = True  # 이후 검증 중단
-                    break
-
+                    if ((table[0] == None or str(table[0]).strip()=='') and
+                    (table[1]==None or str(table[1]).strip()=='') and
+                    (table[2]==None or str(table[2]).strip()=='')):
+                        error_messages.append(
+                            f" 신고서류 내 오류 내용 : 표 {table_idx}: 행이 올바르지 않습니다. \r\n 추출된 행: {table[0]} \r\n 오류 발생 요인 : 치수 양식과 일치하지 않습니다.  \r\n 오류 사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
+                        )
+                        validation_stopped = True  # 이후 검증 중단
+                        pass
+                    else:
+                        pass
                 # 딕셔너리 변환
                 dict_data = table_to_dict(table)
                 # all_tables.extend(dict_data)
