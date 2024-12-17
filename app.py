@@ -7,7 +7,6 @@ from scripts.validate.read_to_pdf_size import *
 from scripts.validate.read_to_pdf_usage import *
 from scripts.validate.read_to_pdf_wp import *
 from scripts.validate.read_pdf_file_with_keyword import *
-from test_utils import *
 import os
 shape_table = []
 wp_table = []
