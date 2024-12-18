@@ -63,27 +63,25 @@ def clean_text(text):
     """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
     return text.replace('\n', '').replace(' ', '').strip() if isinstance(text, str) else ""
 
-def check_invalid_words(data_list):
-    """
-    데이터 리스트에서 사용 불가 단어를 확인합니다.
-    :param data_list: 입력 데이터 리스트 (각각 문자열)
-    :param invalid_words: 사용 불가 단어 리스트
-    :return: 사용 불가 단어가 포함된 항목 리스트
-    """
-    for data in data_list:
-        for row in data:
-            if not isinstance(row, str):  # data가 문자열인지 확인
-                print(f"경고: '{row}'는 문자열이 아니므로 건너뜁니다.")
-                continue
-            for invalid_word in forbidden_words:
-                if invalid_word in row:  # 문자열 비교
-                    error_message = (
-                        f'사용 불가 단어가 확인되었습니다. 사용자 데이터 : {row}  사용 불가 단어 : {invalid_word}'
-                    )
-                    error_messages.append(error_message)
-                    continue  # 하나의 단어만 일치해도 중단
-
-import re
+# def check_invalid_words(data_list):
+#     """
+#     데이터 리스트에서 사용 불가 단어를 확인합니다.
+#     :param data_list: 입력 데이터 리스트 (각각 문자열)
+#     :param invalid_words: 사용 불가 단어 리스트
+#     :return: 사용 불가 단어가 포함된 항목 리스트
+#     """
+#     for data in data_list:
+#         for row in data:
+#             if not isinstance(row, str):  # data가 문자열인지 확인
+#                 print(f"경고: '{row}'는 문자열이 아니므로 건너뜁니다.")
+#                 continue
+#             for invalid_word in forbidden_words:
+#                 if invalid_word in row:  # 문자열 비교
+#                     error_message = (
+#                         f'사용 불가 단어가 확인되었습니다. 사용자 데이터 : {row}  사용 불가 단어 : {invalid_word}'
+#                     )
+#                     error_messages.append(error_message)
+#                     continue  # 하나의 단어만 일치해도 중단
 
 def preprocess_row(row):
     """
@@ -486,39 +484,12 @@ def validate_mat(file_path):
                                 elif table1[0] == '일련번호':
                                     continue        
                                 elif len(clean_table1) == 0:
-                                    # error_message = (
-                                    #     f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 데이터가 입력되지 않았습니다. 해당되지 않는 곳에 해당없음을 기재해주세요. \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
-                                    # )
-                                    # error_messages.append(error_message)
                                     continue                                                                                                 
                                 else:
                                     error_message = (
                                         f' 신고서류 내 오류 내용 : {table1} \r\n 오류 발생 요인 : 신고서류 양식과 일치하지 않습니다 \r\n 오류 사항에 대한 근거 : 원재료 - 규정 제10조(원재료) 내용 확인이 필요합니다'
                                     )
                                     error_messages.append(error_message)                                
-                                # table1 = clean_and_filter_list(table1)
-                                # if table1[0].isdigit():
-                                #     all_tables.append(table1)
-                                # elif len(table1) > 0 and (table1[0] in valid_keywords2 or (len(table1) > 1 and table1[1] in valid_keywords2)):
-                                #     all_tables2.append(table1)
-                                # elif len(table1) > 0 and (table1[0] in valid_keywords2 or (len(table1) > 1 and table1[1] in valid_keywords2)):
-                                #     if not (table1[0] == '원재료공통기재사항'):
-                                #         table1.insert(0,'원재료공통기재사항')
-                                #     all_tables1.append(table1)
-                                # elif len(table1) > 0 and (table1[0] in valid_keywords3 or (len(table1) > 1 and table1[1] in valid_keywords3)):
-                                #     if(table1[0] == '원재료물리‧화학정보'):
-                                #         all_tables1.append(table1)
-                                #     else:
-                                #         table1.insert(0,'원재료물리‧화학정보')
-                                #         all_tables1.append(table1)                                    
-                                # elif len(table1) > 0 and (table1[0] in valid_keywords4 or (len(table1) > 1 and table1[1] in valid_keywords4)):
-                                #     if(table1[0] == '원재료제조자정보'):
-                                #         all_tables1.append(table1)
-                                #     else:
-                                #         table1.insert(0,'원재료제조자정보')
-                                #         all_tables1.append(table1)    
-                                # else:
-                                #     pass   
 ##########################################################################################
 ## 분기 ##
 #########################################################################################                                    
