@@ -34,7 +34,7 @@ def validate_dict_data(dict_data, forbidden_words):
         if any(keyword in item['번호'] for keyword in ['외관사진', '외관설명']):
             continue
         else:
-            if not item['번호'].isdigit():
+            if item['번호'] is None or str(item['번호']).strip() == '':
                 row_errors.append(
                     f" 신고서류 내 검토필요사항 : {item['번호']} \r\n 검토사항 발생 요인 : 잘못된 데이터 형식이 발견되었습니다.('번호'가 숫자가 아님) \r\n 검토사항에 대한 근거 : 외형 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
                     )
@@ -63,48 +63,64 @@ def validate_dict_data(dict_data, forbidden_words):
             for row in row_errors :
                 error_messages.append(row)
     return error_messages
-
+def table_to_list(table):
+    """테이블 데이터를 리스트 형태로 변환."""
+    result_list = []
+    for row in table[1:]:  # 첫 행은 헤더이므로 제외
+        clean_row = [clean_text(cell) for cell in row]
+        result_list.append(clean_row)
+    return result_list
 def validate_shape(file_path):
-    """PDF 파일을 읽고 딕셔너리를 기반으로 검증."""
-    all_tables = []
-    error_messages = []
+    """PDF 파일을 읽고 테이블 데이터를 리스트로 추출 및 검증."""
+    all_tables = []  # 모든 테이블 데이터를 리스트로 저장
+    error_messages = []  # 검증 중 발생한 에러 메시지 저장
+    current_table_data = []  # 현재 검증 중인 테이블 데이터
+    validation_in_progress = False  # 검증 활성화 여부
 
     with pdfplumber.open(file_path) as pdf:
         for page_number, page in enumerate(pdf.pages, start=1):
-            # print(f"페이지 {page_number} 처리 중...")
+            # 페이지의 테이블 데이터 추출
             page_tables = page.extract_tables()
-            if not page_tables:
+            if not page_tables:  # 테이블이 없으면 건너뛴다.
                 continue
 
             for table in page_tables:
+                if not table or len(table) == 0:  # 테이블이 비어있을 경우 처리
+                    continue
+
                 # 첫 번째 행 검증 (정규화된 비교)
                 first_row = normalize_header(table[0])
                 normalized_fixed_header = normalize_header(fixed_header)
 
-                # "외관사진" 또는 "외관설명" 포함 여부 확인
-                contains_exterior_info = any(
-                    "외관사진" in clean_text(cell) or "외관설명" in clean_text(cell)
-                    for cell in table[0]
-                )
-                dict_data = table_to_dict(table)
-                
-                for row in table :
-                    add_row = ''
-                    for a in row :
-                        a = clean_text(a)
-                        add_row = add_row + ' ' + a
-                    
-                    if not clean_text(add_row) == '' and not clean_text(add_row) == clean_text(fixed_header_str) and not contains_exterior_info:
-                        all_tables.append(add_row)
-                    # all_tables.append(clean_text(add_row))
-                
-                # 데이터 검증
-                errors = validate_dict_data(dict_data, forbidden_words)
-                if errors:
-                    for error in errors:
-                        error_messages.append(error)
-                
+                # `fixed_header`가 나타나는 경우
+                if first_row == normalized_fixed_header:
+                    # 이전 검증 데이터 처리
+                    if validation_in_progress:
+                        dict_data = table_to_dict(current_table_data)
+                        errors = validate_dict_data(dict_data, forbidden_words)
+                        error_messages.extend(errors)
+                        all_tables.extend(current_table_data)
+                        current_table_data = []  # 현재 테이블 데이터 초기화
+
+                    # 새로운 검증 시작
+                    validation_in_progress = True
+                    continue  # 헤더는 처리하지 않음
+
+                # 검증 활성화 상태일 때만 데이터 추가
+                if validation_in_progress:
+                    table_data = table_to_list(table)  # 테이블 데이터를 리스트로 변환
+                    if table_data:
+                        current_table_data.extend(table_data)
+
+        # 마지막 검증 데이터 처리
+        if validation_in_progress and current_table_data:
+            dict_data = table_to_dict(current_table_data)
+            errors = validate_dict_data(dict_data, forbidden_words)
+            error_messages.extend(errors)
+            all_tables.extend(current_table_data)
+
     return all_tables, error_messages
+
 
 
 
