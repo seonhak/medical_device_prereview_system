@@ -31,7 +31,6 @@ def validate_all_docs(folder_path, code):
     mat_table = []
     usage_table = []
     pfu_table = []
-    no_error_files = []
     for keyword in keywords :
         label = 0
         if keyword == '외형':
@@ -152,7 +151,7 @@ def validate_all_docs(folder_path, code):
                     #     error_messages.append('검토사항에 대한 근거 : 사용 시 주의사항 - 규정 제14조 내용 확인이 필요합니다')
         else:
             pass
-    return all_tables, error_messages, no_error_files
+    return all_tables, error_messages
 # return shape_table, shape_error, size_table, size_error, mat_table, mat_error, wp_table, wp_error, usage_table, usage_error, pfu_table, pfu_error
 
 # spring boot 내부에서 ProcessBuilder를 통해 cmd처럼 커맨드를 실행해 app.py를 실행
@@ -160,35 +159,29 @@ def validate_all_docs(folder_path, code):
 # 결과 변수를 직접 받는게 아니라, 결과를 출력하면 ProcessBuilder로 출력한 결과를 읽어오는 방식
 
 # 1 : 스타킹형 2 : 벨트형 3 : 자가점착형
-folder_path = r"C:\Users\USER\Desktop\식약처\검증용데이터_기안문포함"
+folder_path = r"C:\Users\USER\Desktop\식약처\검증용데이터_기안문포함\새 폴더"
 folder_list = get_folders(folder_path)
 
 all_tables = []
 error_messages = []
-no_error_files = []
-kobert_result = []
-# TODO 규칙 기반 검증 후 에러 메시지가 없는 파일은 KoBERT 검증을 통해 생성된 에러 메시지를 저장
-# error messages로 받는게 아닌, 형태 별 에러메시지를 따로 저장해서 return 받을 것
+
 for folder in folder_list:
     
     num = os.path.basename(folder).split("_")[0]
     if '스타킹' in folder:
-        all_tables, error_messages, no_error_files = validate_all_docs(folder, 1)
+        all_tables, error_messages = validate_all_docs(folder, 1)
     elif '벨트형' in folder:
-        all_tables, error_messages, no_error_files = validate_all_docs(folder, 2)
+        all_tables, error_messages = validate_all_docs(folder, 2)
     elif '점착형' in folder:
-        all_tables, error_messages, no_error_files = validate_all_docs(folder, 3)
+        all_tables, error_messages = validate_all_docs(folder, 3)
     else:
-        print('폴더명이 맞지 않아요')
-
-    if error_messages:
-        print("보고서 작성 중===========================")
-        error_result = []
-        for errors in error_messages:
-            if errors != None and type(errors) == list:
-                for row in errors:
-                    if row != None:
-                        error_result.append(row)
-            else: error_result.append(errors)
-        save_filepath = folder + fr"/report{num}.hwp"
-        save_list_to_hwp(save_filepath, error_result)
+        pass
+    error_result = []
+    for errors in error_messages:
+        if errors != None and type(errors) == list:
+            for row in errors:
+                if row != None:
+                    error_result.append(row)
+        else: error_result.append(errors)
+    save_filepath = folder + fr"/report{num}.hwp"
+    save_list_to_hwp(save_filepath, error_result)
