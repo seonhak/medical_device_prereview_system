@@ -3,52 +3,17 @@ import re
 import pdfplumber 
 from .required_wp import *
 from .forbidden_words import *
+from .validate_utils import *
 # 작용원리
-
-def clean_text(text):
-    """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
-    return text.replace('\n', '').replace(' ', '').strip() if isinstance(text, str) else ""
-
-# 정규화 함수 확장
-def normalize_text(text):
-    """
-    텍스트 정규화:
-    - 불필요한 공백 및 특수 공백 제거
-    - '\n', '\r' 등 개행 문자 제거
-    - 일반 공백 문자 및 특수 공백 문자(\u200b, \u00a0, \u3000) 제거
-    """
-    # 줄바꿈 및 특수 공백 제거
-    normalized = re.sub(r'[\u200b\u00a0\u3000\.]', '', text)  # 특수 공백과 온점 제거
-    normalized = re.sub(r'\s+', '', normalized)  # 일반 공백 제거
-    return normalized.strip()
 
 def process_data_with_normalization(data, required_phrases, forbidden_words):
     error_messages = []  # 모든 오류 메시지를 저장할 리스트
     # 데이터 정규화
     normalized_data = normalize_text(data)
-    # print(normalized_data)
-    # 필수 문장 포함 여부 확인
-    found_required_phrase = False
-    for phrase_pattern in required_phrases:
-        normalized_phrase = normalize_text(phrase_pattern)  
-        if clean_text(normalized_phrase) in clean_text(normalized_data):
-            found_required_phrase = True 
-            break  
     # 필수 문장이 하나도 포함되지 않은 경우 에러 메시지 추가
-    if not found_required_phrase:
-        error_messages.append(
-            f" 신고서류 내 검토필요사항 내용: {data} \r\n 검토사항 발생 요인 : 필수 문장이 하나도 포함되지 않았습니다. \r\n 검토사항에 대한 근거 : 작용원리 - 규정 제12조 내용 확인이 필요합니다"
-        )
+    error_messages.extend(validate_include_phrase(required_phrases, normalized_data))
     # 금지 단어 포함 여부 확인
-    lines = data.splitlines()
-    for line_number, line in enumerate(lines, start=1):
-        normalized_line = normalize_text(line)  # 각 줄 정규화
-        for word_pattern in forbidden_words:
-            normalized_word = normalize_text(word_pattern)  # 금지 단어 정규화
-            if re.search(normalized_word, normalized_line):
-                error_messages.append(
-                    f" 신고서류 내 검토필요사항 내용: {normalized_line} \r\n 검토사항 발생 요인 : 금지 단어 \'{normalized_word}\'(이)가 포함되었습니다. \r\n 검토사항에 대한 근거 : 작용원리 - 규정 제12조 내용 확인이 필요합니다"
-                    )
+    error_messages.extend(check_invalid_words(normalized_data))
     return error_messages
 
 #############################################################

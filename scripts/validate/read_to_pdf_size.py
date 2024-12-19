@@ -2,39 +2,27 @@ import pdfplumber
 from .forbidden_words import forbidden_words  # 금지 단어 리스트
 # from forbidden_words import forbidden_words
 from .save_error_to_txt import save_error_to_file  # 에러 저장 함수
+from .validate_utils import *
 # 치수
 
 fixed_header = ['번호', '명칭', '치수']
 fixed_header2 = ['번호', '모델명 또는 명칭', '치수 및 중량']
 fixed_header_str = '번호명칭치수'
-def clean_text(text):
-    """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
-    return text.replace('\n', '').replace(' ', '').strip() if isinstance(text, str) else ""
-
-def normalize_header(header_row):
-    """헤더 행을 정규화하여 공백과 대소문자를 통일."""
-    return [clean_text(cell).lower().replace(" ", "") for cell in header_row]
-
 def table_to_dict(table):
     """테이블 데이터를 딕셔너리 리스트로 변환."""
     keys = ['번호', '명칭', '치수']
     dict_list = []
     for row_idx, row in enumerate(table[1:], start=2):  # 첫 행은 헤더이므로 제외
-        # 데이터 디버깅
-        # print(f"페이지 테이블 행 {row_idx}: {row}")
-        
-        # 빈 행 건너뜀
-        if all(cell.strip() == "" for cell in row):
-            # print(f"빈 행 건너뜀: {row}")
+        # 빈 행 건너뜀 (각 셀이 None이거나 빈 문자열일 경우)
+        if all(cell is None or (isinstance(cell, str) and cell.strip() == "") for cell in row):
             continue
         
         # 줄바꿈 제거 및 데이터 클리닝
-        row = [clean_text(cell.replace('\n', '')) for cell in row]
+        row = [clean_text(cell.replace('\n', '')) if isinstance(cell, str) else "" for cell in row]
         
         # 누락된 열은 빈 문자열로 보완
         row = row + [''] * (len(keys) - len(row))
         if len(row) < len(keys):  # 예상보다 짧은 경우 무시
-            # print(f"행 {row_idx}가 예상 키 길이에 맞지 않음: {row}")
             continue
         
         # 딕셔너리 변환
@@ -43,13 +31,15 @@ def table_to_dict(table):
     return dict_list
 
 
+
 def validate_dict_data(dict_data, forbidden_words):
     """딕셔너리 데이터를 검증."""
     error_messages = []  # 모든 오류 메시지를 저장할 리스트
     for idx, item in enumerate(dict_data, start=1):
         row_errors = []
         # "번호" 검증 - 숫자여야 하며 부등호 포함 불가
-        if not item['번호'].isdigit() or '>' in item['번호'] or '<' in item['번호']:
+        if item['번호'] is None or str(item['번호']).strip() == '':
+        # if not item['번호'].isdigit() or '>' in item['번호'] or '<' in item['번호']:
             row_errors.append(
                 f" 신고서류 내 검토필요사항 내용 : {item['번호']} \r\n 검토사항 발생 요인 : 잘못된 데이터 형식이 발견되었습니다.('번호'가 숫자가 아님)  \r\n 검토사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
                 )
@@ -66,11 +56,12 @@ def validate_dict_data(dict_data, forbidden_words):
                         )
         
         # "치수" 검증 - 숫자여야 하며 부등호 포함 불가
+        if item['치수'] is None or str(item['치수']).strip() == '':
         # if not item['치수'].replace('.', '', 1).isdigit():
-        # # or '>' in item['치수'] or '<' in item['치수']:
-        #     row_errors.append(
-        #         f" 신고서류 내 검토필요사항 내용 : {item['치수']} \r\n 검토사항 발생 요인 : 잘못된 데이터 형식이 발견되었습니다.('치수'가 숫자가 아님)  \r\n 검토사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
-        #         )
+        # or '>' in item['치수'] or '<' in item['치수']:
+            row_errors.append(
+                f" 신고서류 내 검토필요사항 내용 : {item['치수']} \r\n 검토사항 발생 요인 : 잘못된 데이터 형식이 발견되었습니다.('치수'가 숫자가 아님)  \r\n 검토사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
+                )
 
         if row_errors:
             for row in row_errors :
@@ -115,9 +106,8 @@ def validate_size(file_path):
                     (table[1]==None or str(table[1]).strip()=='') and
                     (table[2]==None or str(table[2]).strip()=='')):
                         error_messages.append(
-                            f" 신고서류 내 오류 내용 : 표 {table_idx}: 행이 올바르지 않습니다. \r\n 추출된 행: {table[0]} \r\n 오류 발생 요인 : 치수 양식과 일치하지 않습니다.  \r\n 오류 사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
+                            f" 신고서류 내 검토필요사항 내용 : 표 {table_idx}: 행이 올바르지 않습니다. \r\n 추출된 행: {table[0]} \r\n 검토사항 발생 요인 : 치수 양식과 일치하지 않습니다.  \r\n 검토사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다" 
                         )
-                        validation_stopped = True  # 이후 검증 중단
                         pass
                     else:
                         pass

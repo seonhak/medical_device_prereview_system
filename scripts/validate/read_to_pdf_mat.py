@@ -3,6 +3,7 @@ import re
 import pdfplumber
 from .forbidden_words import *
 from .save_error_to_txt import *
+from .validate_utils import *
 # from forbidden_words import *
 # from save_error_to_txt import *
 # 원재료
@@ -38,10 +39,6 @@ valid_keywords4 =[
     "제품명또는상품명",
     "제품번호또는모델명"
 ]
-
-def clean_text(text):
-    """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
-    return text.replace('\n', '').replace(' ', '').strip() if isinstance(text, str) else ""
 
 def check_invalid_words(data_list):
     """
