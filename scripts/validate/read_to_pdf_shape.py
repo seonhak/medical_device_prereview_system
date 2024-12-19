@@ -1,18 +1,11 @@
 import pdfplumber
 from .forbidden_words import forbidden_words  # 금지 단어 리스트
 from .save_error_to_txt import save_error_to_file  # 에러 저장 함수
+from .validate_utils import *
 # 외형
 
 fixed_header = ['번호', '명칭', '기능 및 역할']
 fixed_header_str = '번호명칭기능및역할'
-
-def clean_text(text):
-    """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
-    return text.replace('\n', '').replace(' ', '').strip() if isinstance(text, str) else ""
-
-def normalize_header(header_row):
-    """헤더 행을 정규화하여 공백과 대소문자를 통일."""
-    return [clean_text(cell).lower().replace(" ", "") for cell in header_row]
 
 def table_to_dict(table):
     """테이블 데이터를 딕셔너리 리스트로 변환."""
@@ -71,7 +64,7 @@ def validate_shape(file_path):
 
     with pdfplumber.open(file_path) as pdf:
         for page_number, page in enumerate(pdf.pages, start=1):
-            # print(f"페이지 {page_number} 처리 중...")
+            # 페이지별로 테이블 추출
             page_tables = page.extract_tables()
             if not page_tables:
                 continue
@@ -86,24 +79,28 @@ def validate_shape(file_path):
                     "외관사진" in clean_text(cell) or "외관설명" in clean_text(cell)
                     for cell in table[0]
                 )
+
+                # "외관사진" 또는 "외관설명" 포함 시 이 테이블은 건너뜀
+                if contains_exterior_info:
+                    continue
+
+                # 테이블 데이터 딕셔너리로 변환 및 검증
                 dict_data = table_to_dict(table)
-                
-                for row in table :
+                for row in table:
                     add_row = ''
-                    for a in row :
+                    for a in row:
                         a = clean_text(a)
                         add_row = add_row + ' ' + a
-                    
-                    if not clean_text(add_row) == '' and not clean_text(add_row) == clean_text(fixed_header_str) and not contains_exterior_info:
+
+                    if not clean_text(add_row) == '' and not clean_text(add_row) == clean_text(fixed_header_str):
                         all_tables.append(add_row)
-                    # all_tables.append(clean_text(add_row))
-                
+
                 # 데이터 검증
                 errors = validate_dict_data(dict_data, forbidden_words)
                 if errors:
                     for error in errors:
                         error_messages.append(error)
-                
+
     return all_tables, error_messages
 
 
