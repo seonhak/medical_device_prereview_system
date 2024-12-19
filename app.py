@@ -8,6 +8,7 @@ from scripts.validate.read_to_pdf_usage import *
 from scripts.validate.read_to_pdf_wp import *
 from scripts.validate.read_pdf_file_with_keyword import *
 from utils import *
+from utils import *
 import os
 shape_table = []
 wp_table = []
@@ -15,6 +16,7 @@ size_table = []
 mat_table = []
 usage_table = []
 pfu_table = []
+keywords = ['외형', '작용원리', '치수', '원재료', '사용방법', '주의사항']
 keywords = ['외형', '작용원리', '치수', '원재료', '사용방법', '주의사항']
 def clean_text(text):
     """텍스트에서 공백 및 줄바꿈을 제거하여 비교를 위한 클리닝."""
@@ -31,8 +33,8 @@ def validate_all_docs(folder_path, code):
     mat_table = []
     usage_table = []
     pfu_table = []
-    no_error_files = []
     for keyword in keywords :
+        label = 0
         label = 0
         if keyword == '외형':
             shape_file = find_pdf_files_with_keyword(folder_path, keyword)
@@ -66,6 +68,7 @@ def validate_all_docs(folder_path, code):
             else:
                 size_table, size_error = validate_size(size_file[0])
                 all_tables.append(size_table)
+                
                 
                 if(type(size_error) != type(None) and len(size_error) != 0):
                     error_messages.append(f" [ 치수파일에 검토사항이 검출되었습니다. 검토사항 검출 개수 : {len(size_error)} ] ")
@@ -186,11 +189,11 @@ for folder in folder_list:
     
     num = os.path.basename(folder).split("_")[0]
     if '스타킹' in folder:
-        all_tables, error_messages, no_error_files = validate_all_docs(folder, 1)
+        all_tables, error_messages = validate_all_docs(folder, 1)
     elif '벨트형' in folder:
-        all_tables, error_messages, no_error_files = validate_all_docs(folder, 2)
+        all_tables, error_messages = validate_all_docs(folder, 2)
     elif '점착형' in folder:
-        all_tables, error_messages, no_error_files = validate_all_docs(folder, 3)
+        all_tables, error_messages = validate_all_docs(folder, 3)
     else:
         print('폴더명이 맞지 않아요')
 
