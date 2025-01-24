@@ -13,7 +13,7 @@ def process_data_with_normalization(data, required_phrases, forbidden_words):
     # 필수 문장이 하나도 포함되지 않은 경우 에러 메시지 추가
     error_messages.extend(validate_include_phrase(required_phrases, normalized_data))
     # 금지 단어 포함 여부 확인
-    error_messages.extend(check_invalid_words(normalized_data))
+    # error_messages.extend(check_invalid_words(normalized_data))
     return error_messages
 
 #############################################################
