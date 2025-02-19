@@ -4,224 +4,212 @@ import pdfplumber
 from .forbidden_words import *
 from .save_error_to_txt import *
 from .validate_utils import *
-# from forbidden_words import *
-# from save_error_to_txt import *
+
 # 원재료
-error_messages = []  # 모든 오류 메시지를 저장할 리스트
-fixed_header = ['일련번호', '부분품의명칭', '원재료명또는성분명', '규격', '분량', '비고(인체접촉여부및접촉부위첨가목적)']
-    # return 들어갈 자리
-fixed_items = [
-        ['원재료 공통 기재사항', '일반명', '', '', ''],
-        ['원재료 공통 기재사항', '화학명', '', '', ''],
-        ['원재료 물리‧화학정보', '구조식', '', '', ''],
-        ['원재료 물리‧화학정보', 'CAS 번호(존재 시)', '', '', ''],
-        ['원재료 물리‧화학정보', '물질 특성', '', '', ''],
-        ['원재료 제조자 정보', '제조자', '', '', ''],
-        ['원재료 제조자 정보', '제품명 또는 상품명', '', '', ''],
-        ['원재료 제조자 정보', '제품번호 또는 모델명', '', '', '']
-    ]
-valid_keywords = [
-            "원재료공통기재사항",
-            "원재료제조자정보",
-            "원재료물리‧화학정보"
-    ]
-valid_keywords2 = [
-    "일반명",
-    "화학명"
-]
-valid_keywords3 = [
-    "구조식",
-    "CAS번호(존재시)",
-    "물질특성"
-]
-valid_keywords4 =[
-    "제조자",
-    "제품명또는상품명",
-    "제품번호또는모델명"
-]
-
-def check_invalid_words(data_list):
-    """
-    데이터 리스트에서 사용 불가 단어를 확인합니다.
-    :param data_list: 입력 데이터 리스트 (각각 문자열)
-    :param invalid_words: 사용 불가 단어 리스트
-    :return: 사용 불가 단어가 포함된 항목 리스트
-    """
-    for data in data_list:
-        for row in data:
-            if not isinstance(row, str):  # data가 문자열인지 확인
-                print(f"경고: '{row}'는 문자열이 아니므로 건너뜁니다.")
-                continue
-            for invalid_word in forbidden_words:
-                if invalid_word in row:  # 문자열 비교
-                    error_message = (
-                        f"----사용 불가 단어가 확인되었습니다.---- \r\n 사용자 데이터 : {row}\r\n 사용 불가 단어 : {invalid_word} \r\n 시행규칙 45조(별표 7 제1호~10호) 내용 확인이 필요합니다."
-                    )
-                    error_messages.append(error_message)
-                    continue  # 하나의 단어만 일치해도 중단
-
-def preprocess_row(row):
-    """
-    데이터 행(row)을 전처리하여 공백, 특수문자 및 불필요한 줄바꿈 제거.
-    문자열, 리스트, None을 모두 안전하게 처리.
-    """
-    # None 처리
-    if row is None:
-        return []
-
-    # 문자열이 들어오면 리스트로 변환
-    if isinstance(row, str):
-        row = [row]
-
-    # row가 리스트가 아닐 경우 예외 처리
-    if not isinstance(row, list):
-        raise TypeError(f"전처리 중 예상치 못한 데이터 형식 발생: {row}")
-
-    # 리스트 요소별 전처리
-    return [
-        re.sub(r'[\u200b\u00a0\u3000\s]', '', cell.replace('\n', '').replace('\r', '').replace(',', '').strip()) if cell else ""
-        for cell in row
-    ]
-
-
-def clean_and_filter_list(data):
-    """
-    데이터를 정리하고 유효한 값만 반환.
-    - None 값을 빈 리스트로 처리
-    - 문자열 또는 리스트를 처리 가능
-    - 리스트가 아닌 경우 무시하고 넘어감
-    """
-    # None 값 처리
-    if data is None:
-        return []
-
-    # 문자열을 리스트로 변환
-    if isinstance(data, str):
-        data = [data]
-
-    # 리스트가 아닌 경우 건너뛰기
-    if not isinstance(data, list):
-        print(f"경고: 입력 데이터가 리스트가 아님, 건너뜀: {data}")
-        return []
-
-    # 리스트 값 전처리
-    cleaned_list = []
-    for item in data:
-        if item is None:  # None 값 무시
-            continue
-        cleaned_item = re.sub(r'\s+|%', '',str(item))  # 공백 제거
-        if cleaned_item:  # 비어 있지 않은 값만 추가
-            cleaned_list.append(cleaned_item)
-    return cleaned_list
-
 def validate_mat(file_path):
-    result_tables = []
-    all_tables = []
-    all_tables1= []
-
-    with pdfplumber.open(file_path) as pdf:
-        for page_number, page in enumerate(pdf.pages, start=0):
-            page_tables = page.extract_tables()
-            for table_number,table in enumerate(page_tables, start=0):
-                first_row = preprocess_row(table[0])
-                if first_row != fixed_header :
-                    error_message = (
-                        f'형식이 일치하지 않습니다 : 사용자 데이터 : {first_row} 기준 데이터 : {fixed_header}'
-                    )
-                # if first_row == fixed_header :
-                for table_data in table[1:]:
-                    # print(table_data)
-                    a = clean_and_filter_list(table_data)
-                    temp = ''
-                    for r in a :
-                        in_fixed_items = False
-                        for fixed_item_list in fixed_items :
-                            for fixed_item in fixed_item_list :
-                                if clean_text(r) == clean_text(fixed_item):
-                                    in_fixed_items = True
-                        if not in_fixed_items: 
-                            temp = temp + r
-                    result_tables.append(temp)
-                    
-                    if ( len(a) > 0 and
-                        a[0] is not None and str(a[0]).isdigit() and
-                        a[4] is not None and str(a[4]).isdigit()
-                    ):                            
-                        all_tables.append(a)
-                        continue
-                    elif len(all_tables) == 0:
-                        error_message = (
-                            f'데이터 형식이 옳바르지 않습니다 - {a}'
-                        )
-                        error_messages.append(error_message)
-                        all_tables.append(a)
-                    elif len(a) > 0 and a[0] in all_tables[0][3]:
-                        all_tables1.append(a)
-                    elif len(a) > 0 and a[0] in valid_keywords:
-                        all_tables1.append(a)
-                    elif len(a) > 0 and table_data[0] == None or table_data[0] =='':
-                        
-                        for data_row in a:
-                            # print(data_row)
-                            if data_row in valid_keywords2:
-                                a.insert(0,'원재료공통기재사항')
-                                all_tables1.append(a)
-                                break
-                            elif data_row in valid_keywords3:
-                                a.insert(0,'원재료제조자정보')
-                                all_tables1.append(a)
-                                break
-                            elif data_row in valid_keywords4:
-                                a.insert(0,'제품번호또는모델명')
-                                all_tables1.append(a)
-                                break
-                            # else:
-                            #     error_message = (
-                            #         f'{valid_keywords}가 포함되지 않았습니다 - {data_row}'                                    
-                            #     )
-                            #     error_messages.append(error_message)
-                            #     continue
-                    elif a == '':
-                        error_message = (
-                            f'데이터가 비어 있습니다 - {table_data}'
-                        )
-                        error_messages.append(error_message)                                                        
-                    else :
-
-                        continue               
-
-    if len(all_tables) > 0:
-        a = float(0)
-        b = all_tables[0][0]
-        for data in all_tables:
-            if b == data[0]:
-                a = a+float(data[4])
-            elif not data[0] == b:
-                if not a == 100.0:
-                    error_message = (
-                        f'{data[1]}의 합이 100이 아닙니다 - {a}'
-                    )
-                    error_messages.append(error_message)
-                    # a 초기화
-                a = float(data[4])
-                b = data[0]  
-        if not a == 100.0:
-            error_message = (
-                f'---- 원재료 합이 100이 아닙니다 ---- \r\n 사용자 데이터 : {data[1]}의 합 {a} \r\n 원재료 - 규정 제10조 내용 확인이 필요합니다'
-            )
-            error_messages.append(error_message)
-            # a 초기화
-        a = float(data[4]) 
-        b = data[0]          
-    else :
-        error_message = (
-            f'데이터 형식이 잘못되었습니다'
-        )
-        error_messages.append(error_message)      
-    # 사용 불가 단어 검증 로직 #
-    all_tables.append(all_tables1)
-    check_invalid_words(all_tables)
-
-
+    error_count = 1
+    error_messages = []
     
-    return result_tables, error_messages
+    product_num = []
+    product_name = []
+    product_mat_name = []
+    product_std = []
+    product_amount = []
+    product_bigo = []
+    
+    total_table = []
+    units = []
+    # 패턴 정의
+    num_pattern = re.compile(r'.*(일\s*련\s*번\s*호|번\s*호).*')
+    name_pattern = re.compile(r'.*부\s*분\s*품\s*의\s*명\s*칭.*')
+    mat_name_pattern = re.compile(r'.*원\s*재\s*료\s*명.*')
+    std_pattern = re.compile(r'^\s*규\s*격\s*$')
+    amount_pattern = re.compile(r'.*(분\s*량).*')
+    bigo_pattern = re.compile(r'.*(비\s*고).*')
+    # PDF 파일 열기
+    pdf = pdfplumber.open(file_path)
+    
+    # 모든 페이지의 테이블 추출
+    for page_num, page in enumerate(pdf.pages):
+        tables = page.extract_tables()
+        if tables:  # tables가 비어있지 않을 때만 처리
+            for table in tables:
+                for row in table:
+                    if any(row):  # 빈 row가 아닌 경우만 추가
+                        total_table.append(row)
+    
+    # 세 가지 패턴 중 하나라도 매칭되는지 확인
+    if not any([
+        num_pattern.search(str(cell)) or 
+        name_pattern.search(str(cell)) or 
+        mat_name_pattern.search(str(cell)) or 
+        std_pattern.search(str(cell)) or 
+        amount_pattern.search(str(cell)) or 
+        bigo_pattern.search(str(cell))
+        for row in total_table 
+        for cell in row 
+        if cell
+    ]):
+        error_messages.append(
+            f"{error_count}. 신고서류 원재료 파일에서 일련번호, 명칭, 원재료 관련 정보 찾을 수 없는 것으로 확인됩니다. " +
+            f"재검토 원인은 필수정보 미기재 입니다. " +
+            f"관련 규정은 원재료 - 규정 제10조(원재료)를 확인하시기 바랍니다.\r\n"
+        )
+        error_count += 1
+        print(error_messages)
+        return total_table, error_messages
+    
+    # 인덱스 초기화
+    num_col_idx = []
+    name_col_idx = []
+    mat_name_col_idx = []
+    std_col_idx = []
+    amount_col_idx = []
+    bigo_col_idx = []
+    row_idx = []
+    
+    # 테이블에서 패턴 찾기
+    for i, row in enumerate(total_table):
+        pattern_matched = False
+        if row:
+            none_count = sum(1 for cell in row if cell in [None, ''])
+            if none_count >= 3:
+                continue
+            else:
+                for j, cell in enumerate(row):
+                    if cell:
+                        # 패턴 중 하나라도 일치하면 row_idx에 추가
+                        if (num_pattern.search(str(cell)) or 
+                            name_pattern.search(str(cell)) or 
+                            mat_name_pattern.search(str(cell)) or 
+                            std_pattern.search(str(cell)) or 
+                            amount_pattern.search(str(cell)) or 
+                            bigo_pattern.search(str(cell))): 
+                            pattern_matched = True
+                        # 각각의 컬럼 인덱스는 개별적으로 저장
+                        if num_pattern.search(str(cell)):
+                            num_col_idx.append(j)
+                        if name_pattern.search(str(cell)):
+                            name_col_idx.append(j)
+                        if mat_name_pattern.search(str(cell)):
+                            mat_name_col_idx.append(j)
+                        if std_pattern.search(str(cell)):
+                            std_col_idx.append(j)
+                        if amount_pattern.search(str(cell)):
+                            amount_col_idx.append(j)
+                        if bigo_pattern.search(str(cell)):
+                            bigo_col_idx.append(j)
+        if pattern_matched:
+            row_idx.append(i)
+    
+    for j, header_row_idx in enumerate(row_idx):
+        next_header_row_idx = row_idx[j + 1] if j + 1 < len(row_idx) else len(total_table)
+        
+        for current_row_idx in range(header_row_idx + 1, next_header_row_idx):
+            data_row = total_table[current_row_idx]
+            
+            # None 값이나 빈 문자열의 개수가 3개 이상이면 break
+            none_count = sum(1 for cell in data_row if cell in [None, ''])
+            if none_count >= 3:
+                break
+                
+            # 기존 데이터 수집 로직
+            if (j < len(num_col_idx) and num_col_idx[j] < len(data_row)):
+                num_value = data_row[num_col_idx[j]]
+                if not is_empty(num_value):
+                    product_num.append(num_value)
+            
+            if (j < len(name_col_idx) and name_col_idx[j] < len(data_row)):
+                name_value = data_row[name_col_idx[j]]
+                if not is_empty(name_value):
+                    product_name.append(name_value)
+            
+            if (j < len(mat_name_col_idx) and mat_name_col_idx[j] < len(data_row)):
+                mat_name_value = data_row[mat_name_col_idx[j]]
+                if not is_empty(mat_name_value):
+                    product_mat_name.append(mat_name_value)
+            
+            if (j < len(std_col_idx) and std_col_idx[j] < len(data_row)):
+                std_value = data_row[std_col_idx[j]]
+                if not is_empty(std_value):
+                    product_std.append(std_value)
+            
+            if (j < len(amount_col_idx) and amount_col_idx[j] < len(data_row)): 
+                amount_value = data_row[amount_col_idx[j]]
+                if not is_empty(amount_value):
+                    product_amount.append(amount_value)
+            
+            if (j < len(bigo_col_idx) and bigo_col_idx[j] < len(data_row)):
+                bigo_value = data_row[bigo_col_idx[j]]
+                if not is_empty(bigo_value):
+                    product_bigo.append(bigo_value)
+    
+    temp_error_messages, error_count = validate_mat_factors(product_num, '번호', units, error_count)
+    error_messages.extend(temp_error_messages)
+    temp_error_messages, error_count = validate_mat_factors(product_name, '부분품의 명칭', units, error_count)
+    error_messages.extend(temp_error_messages)
+    temp_error_messages, error_count = validate_mat_factors(product_mat_name, '원재료명', units, error_count)
+    error_messages.extend(temp_error_messages)
+    temp_error_messages, error_count = validate_mat_factors(product_std, '규격', units, error_count)
+    error_messages.extend(temp_error_messages)
+    temp_error_messages, error_count = validate_mat_factors(product_amount, '분량', units, error_count)
+    error_messages.extend(temp_error_messages)
+    temp_error_messages, error_count = validate_mat_factors(product_bigo, '비고', units, error_count)
+    error_messages.extend(temp_error_messages)
+    
+    total_text = ''
+    for page_num, page in enumerate(pdf.pages):
+        text = page.extract_text()
+        if text:
+            total_text += text
+    
+    for std in product_std:
+        std_count = total_text.count(std)
+        
+        if std_count == 1:
+            if not '- 자사규격(아래 기재양식 중에서 해당되는 하나만 선택하여 기재하여 주시기 바랍니다.)' in total_text:
+                error_messages.append(
+                    f"{error_count}. 신고서류 원재료 파일에서 {std}에 대한 상세 정보가 없는 것으로 확인됩니다. " +
+                    f"재검토 원인은 규격 정보 미기재입니다. " + 
+                    f"관련 규정은 원재료 - 규정 제10조(원재료)를 확인하시고, 해당 규격에 대한 상세 정보를 기재하신 후 제출하시기 바랍니다.\r\n"
+                )
+            error_count += 1
+    
+    return total_table, error_messages, error_count
+
+def validate_mat_factors(rows, name, units, error_count):
+    error_messages = []
+    blank_dup_flag = False
+    
+    if len(rows) == 0:
+        error_messages.append(
+            f"{error_count}. 신고서류 원재료 파일에서 {name}(이)가 존재하지 않는 것으로 확인됩니다. " +
+            f"재검토 원인은 {name} 미기재 입니다. " +
+            f"관련 규정은 원재료 - 규정 제10조(원재료)를 확인하시고, {name} 정보를 기재하신 후 제출하시기 바랍니다.(병합된 셀은 병합을 해제해주세요)\r\n"
+        )
+        error_count += 1
+        return error_messages, error_count
+    
+    if(name == '분량'):
+        # 숫자가 포함된 분량 값만 필터링
+        valid_amounts = []
+        for row in rows:
+            if row and isinstance(row, str):
+                # 문자열에서 숫자만 추출
+                # 소수점을 포함한 숫자 추출을 위한 정규식 패턴
+                numbers = re.findall(r'\d*\.?\d+', row)
+                if numbers:
+                    valid_amounts.append(float(numbers[0]))
+                    
+        if valid_amounts:
+            
+            sum_of_amount = sum(valid_amounts)
+            if sum_of_amount % 100 != 0:
+                error_messages.append(
+                    f"{error_count}. 신고서류 원재료 파일에서 분량의 합이 {sum_of_amount % 100}% 입니다." +
+                    f"재검토 원인은 분량 합이 100%가 아닙니다. " +
+                    f"관련 규정은 원재료 - 규정 제10조(원재료)를 확인하시고, 분량을 정확하게 기재하신 후 제출하시기 바랍니다.\r\n"
+                )
+                error_count += 1
+    
+    return error_messages, error_count

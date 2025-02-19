@@ -1,16 +1,15 @@
 import pdfplumber
 import re
 from .validate_utils import *
-
 # 치수
 def validate_size(file_path):
+    error_count = 1
     error_messages = []
     product_num = []
     product_name = []
     product_size = []
     total_table = []
     units = []
-    
     # 패턴 정의
     num_pattern = re.compile(r'.*(번\s*호|일\s*련\s*번\s*호).*')
     name_pattern = re.compile(r'.*(명\s*칭|모\s*델\s*명|이\s*름|제\s*품\s*명|품\s*명).*')
@@ -39,11 +38,12 @@ def validate_size(file_path):
         if cell
     ]):
         error_messages.append(
-            f" 신고서류 내 검토필요사항 내용 : 일련번호, 명칭, 치수 관련 정보 찾을 수 없음\r\n" +
-            f" 검토사항 발생 요인 : 신청제품의 각 부분의 일련번호, 명칭, 치수 정보를 빠짐없이 기재할 것\r\n" +
-            f" 검토사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"
+            f"{error_count}. 신고서류 치수 파일에서 일련번호, 명칭, 치수 관련 정보 찾을 수 없는 것으로 확인됩니다. " +
+            f"재검토 원인은 필수정보 미기재 입니다. " +
+            f"관련 규정은 치수 - 규정 제9조(모양 및 구조)를 확인하시기 바랍니다.\r\n"
         )
-        return total_table, error_messages
+        error_count += 1
+        return total_table, error_messages, error_count
     
     # 인덱스 초기화
     num_col_idx = []
@@ -53,7 +53,7 @@ def validate_size(file_path):
     
     # 테이블에서 패턴 찾기
     for i, row in enumerate(total_table):
-        patter_matched = False
+        pattern_matched = False
         if row:
             for j, cell in enumerate(row):
                 if cell:
@@ -70,7 +70,7 @@ def validate_size(file_path):
                     if (num_pattern.search(str(cell)) or 
                         name_pattern.search(str(cell)) or 
                         size_pattern.search(str(cell))):
-                        patter_matched = True
+                        pattern_matched = True
                     # 각각의 컬럼 인덱스는 개별적으로 저장
                     if num_pattern.search(str(cell)):
                         num_col_idx.append(j)
@@ -78,62 +78,47 @@ def validate_size(file_path):
                         name_col_idx.append(j)
                     if size_pattern.search(str(cell)):
                         size_col_idx.append(j)
-        if patter_matched:
+        if pattern_matched:
             row_idx.append(i)
     # 건너뛸 헤더 패턴
     skip_pattern = re.compile(r'.*[\(（]\s*단\s위\s*:\s*[mc]m\s*[\)）].*')
     
-    for i, row in enumerate(total_table):
-        for j, header_row_idx in enumerate(row_idx):
-            current_idx = header_row_idx
+    for j, header_row_idx in enumerate(row_idx):
+        # 다음 헤더의 인덱스를 찾거나, 없으면 테이블 끝까지
+        next_header_row_idx = row_idx[j + 1] if j + 1 < len(row_idx) else len(total_table)
+        
+        # 현재 헤더 다음 행부터 다음 헤더 전까지 순회
+        for current_row_idx in range(header_row_idx + 1, next_header_row_idx):
+            data_row = total_table[current_row_idx]
             
-            while current_idx < len(total_table):
-                data_row = total_table[current_idx]
-                if data_row is None:
-                    current_idx += 1
-                    continue
+            if is_skip_header(data_row, skip_pattern):
+                continue
                 
-                if current_idx != header_row_idx and is_skip_header(data_row, skip_pattern):
-                    break
-                
-                # 1. i번째 인덱스가 있는 col_idx들만 모으기
-                valid_indices = []
-                if i < len(num_col_idx):
-                    valid_indices.append(num_col_idx[i])
-                    num_value = data_row[num_col_idx[i]]
-                if i < len(name_col_idx):
-                    valid_indices.append(name_col_idx[i])
-                    name_value = data_row[name_col_idx[i]]
-                if i < len(size_col_idx):
-                    valid_indices.append(size_col_idx[i])
-                    size_value = data_row[size_col_idx[i]]
+            # 데이터 행의 길이 확인
+            if (j < len(num_col_idx) and num_col_idx[j] < len(data_row)):
+                num_value = data_row[num_col_idx[j]]
+                if clean_text(num_value) not in [clean_text(num) for num in product_num]:
+                    product_num.append(num_value)
+            
+            if (j < len(name_col_idx) and name_col_idx[j] < len(data_row)):
+                name_value = data_row[name_col_idx[j]]
+                if clean_text(name_value) not in [clean_text(name) for name in product_name]:
+                    product_name.append(name_value)
+            
+            if (j < len(size_col_idx) and size_col_idx[j] < len(data_row)):
+                size_value = data_row[size_col_idx[j]]
+                if clean_text(size_value) not in [clean_text(size) for size in product_size]:
+                    product_size.append(size_value)
 
-                # 2. 유효한 인덱스들 중 최대값으로 data_row 길이 비교
-                if valid_indices and max(valid_indices) < len(data_row):
-                    
-                    if (not is_empty(num_value) or not is_empty(name_value) or not is_empty(size_value)):
-                        if is_empty(num_value) or is_empty(name_value) or is_empty(size_value):
-                            error_messages.append(
-                                f" 신고서류 내 검토필요사항 내용 : 일부 정보가 누락되었습니다 (번호: {num_value or '누락'}, 명칭: {name_value or '누락'}, 치수: {size_value or '누락'})\r\n" +
-                                f" 검토사항 발생 요인 : 신청제품의 각 부분의 정보를 빠짐없이 기재할 것 (셀이 병합되어 있다면 개별 셀로 분리하여 입력)\r\n" +
-                                f" 검토사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"
-                            )
-                    
-                    # 기존 데이터 저장 로직
-                    if clean_text(num_value) not in [clean_text(num) for num in product_num]:
-                        product_num.append(num_value)
-                    if clean_text(name_value) not in [clean_text(name) for name in product_name]:
-                        product_name.append(name_value)
-                    if clean_text(size_value) not in [clean_text(size) for size in product_size]:
-                        product_size.append(size_value)
-                
-                current_idx += 1
-    error_messages.extend(validate_factors(product_num, '번호', units))
-    error_messages.extend(validate_factors(product_name, '명칭', units))
-    error_messages.extend(validate_factors(product_size, '치수', units))
-    return total_table, error_messages
+    temp_error_messages, error_count = validate_size_factors(product_num, '번호', units, error_count)
+    error_messages.extend(temp_error_messages)
+    temp_error_messages, error_count = validate_size_factors(product_name, '명칭', units, error_count)
+    error_messages.extend(temp_error_messages)
+    temp_error_messages, error_count = validate_size_factors(product_size, '치수', units, error_count)
+    error_messages.extend(temp_error_messages)
+    return total_table, error_messages, error_count
 
-def validate_factors(rows, name, units):
+def validate_size_factors(rows, name, units, error_count):
     error_messages = []
     blank_dup_flag = False
     
@@ -142,20 +127,12 @@ def validate_factors(rows, name, units):
     
     if len(rows) == 0:
         error_messages.append(
-            f" 신고서류 내 검토필요사항 내용 : {name}(이)가 존재하지 않습니다.\r\n" +
-            f" 검토사항 발생 요인 : 신청제품의 각 부분의 {name}(을)를 빠짐없이 기재할 것\r\n" +
-            f" 검토사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"
+            f"{error_count}. 신고서류 치수 파일에서 {name}(이)가 존재하지 않는 것으로 확인됩니다. " +
+            f"재검토 원인은 {name} 미기재 입니다. " +
+            f"관련 규정은 치수 - 규정 제9조(모양 및 구조)를 확인하시고, {name} 정보를 기재하신 후 제출하시기 바랍니다.\r\n"
         )
-        return error_messages
-        
-    for row in rows:
-        if is_empty(row) and not blank_dup_flag:
-            error_messages.append(
-                f" 신고서류 내 검토필요사항 내용 : {name}에 빈 칸이 존재합니다.\r\n" +
-                f" 검토사항 발생 요인 : 신청제품의 각 부분의 {name}(을)를 빠짐없이 기재할 것\r\n" +
-                f"검토사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"
-            )
-            blank_dup_flag = True
+        error_count += 1
+        return error_messages, error_count
     
     if(name == '치수'):
         inch_pattern = re.compile(r'\d+(\.\d+)?\s*\"')  # 예: "123" 또는 "123.45"
@@ -164,8 +141,9 @@ def validate_factors(rows, name, units):
                 if (any(unit in row for unit in ['inch', 'in.']) or inch_pattern.search(str(row))) and row:
                     if not any(unit in row for unit in units):
                         error_messages.append(
-                            f" 신고서류 내 검토필요사항 내용 : \'{row}\'\r\n" +
-                            f" 검토사항 발생 요인 : 치수 단위 누락, SI 단위로 표기할 것\r\n" +
-                            f" 검토사항에 대한 근거 : 치수 - 규정 제9조(모양 및 구조) 내용 확인이 필요합니다"
+                            f"{error_count}. 신고서류 치수 파일에서 치수 단위가 누락된 것으로 확인됩니다. " +
+                            f"재검토 원인은 SI 단위 미기재 입니다. " +
+                            f"관련 규정은 치수 - 규정 제9조(모양 및 구조)를 확인하시고, SI 단위를 표기하신 후 제출하시기 바랍니다.\r\n"
                         )
-    return error_messages
+                        error_count += 1
+    return error_messages, error_count

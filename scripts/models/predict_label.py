@@ -18,7 +18,5 @@ def predict_label(input_text):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
     inputs = preprocess_input(model_input, tokenizer)
-    # print(inputs)
     predicted_label = predict(model_input, tokenizer, model, device)
-    # print(predicted_label)
     return predicted_label

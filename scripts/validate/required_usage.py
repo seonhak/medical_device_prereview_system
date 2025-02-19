@@ -19,7 +19,13 @@ required_phrases_belt = [
 ]
 
 common_phrases = [
-    r"사용 전 준비사항",
+    r"사용 전",
     r"조작방법",
-    r"사용 후 보관 및 관리방법",
+    r"사용 후",
 ]
+
+# common_phrases = [
+#     r"사용 전의 준비사항",
+#     r"조작방법",
+#     r"사용 후의 보관 및 관리방법",
+# ]
