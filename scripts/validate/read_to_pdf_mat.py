@@ -2,7 +2,6 @@ import os
 import re
 import pdfplumber
 from .forbidden_words import *
-from .save_error_to_txt import *
 from .validate_utils import *
 
 # 원재료

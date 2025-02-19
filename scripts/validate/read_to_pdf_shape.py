@@ -1,6 +1,5 @@
 import pdfplumber
 from .forbidden_words import forbidden_words  # 금지 단어 리스트
-from .save_error_to_txt import save_error_to_file  # 에러 저장 함수
 from .validate_utils import *
 # 외형
 def validate_shape(file_path):
