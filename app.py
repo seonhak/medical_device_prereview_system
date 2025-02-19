@@ -50,7 +50,7 @@ def validate_all_docs(folder_path, code):
                 if(type(shape_error) != type(None) and len(shape_error) != 0):
                     error_messages.append(f"[신고 서류 사전 검토 결과 다음과 같은 재검토 사항을 발견하였습니다]")
                     error_messages.append(shape_error)
-                elif len(shape_error) == 0:
+                elif len(shape_error) == 1:
                     error_messages.append(f"[민원 서류 사전 검토 결과 보완 사항을 발견하지 못했습니다]\r\n")
         elif keyword == '작용원리':
             wp_file = find_pdf_files_with_keyword(folder_path, keyword)
@@ -69,7 +69,7 @@ def validate_all_docs(folder_path, code):
                 if(type(wp_error) != type(None) and len(wp_error) != 0):
                     error_messages.append(f"[신고 서류 사전 검토 결과 다음과 같은 재검토 사항을 발견하였습니다]")
                     error_messages.append(wp_error)
-                elif len(shape_error) == 0:
+                elif len(shape_error) == 1:
                     error_messages.append(f"[민원 서류 사전 검토 결과 보완 사항을 발견하지 못했습니다]\r\n")
         elif keyword == '치수':
             size_file = find_pdf_files_with_keyword(folder_path, keyword)
@@ -88,7 +88,7 @@ def validate_all_docs(folder_path, code):
                 if(type(size_error) != type(None) and len(size_error) != 0):
                     error_messages.append(f"[신고 서류 사전 검토 결과 다음과 같은 재검토 사항을 발견하였습니다]")
                     error_messages.append(size_error)
-                elif len(shape_error) == 0:
+                elif len(shape_error) == 1:
                     error_messages.append(f"[민원 서류 사전 검토 결과 보완 사항을 발견하지 못했습니다]\r\n")
         elif keyword == '원재료':
             mat_file = find_pdf_files_with_keyword(folder_path, keyword)
@@ -107,7 +107,7 @@ def validate_all_docs(folder_path, code):
                 if(type(mat_error) != type(None) and len(mat_error) != 0):
                     error_messages.append(f"[신고 서류 사전 검토 결과 다음과 같은 재검토 사항을 발견하였습니다]")
                     error_messages.append(mat_error)
-                elif len(shape_error) == 0:
+                elif len(shape_error) == 1:
                     error_messages.append(f"[민원 서류 사전 검토 결과 보완 사항을 발견하지 못했습니다]\r\n")
         elif keyword == '사용방법':
             usage_file = find_pdf_files_with_keyword(folder_path, keyword)
@@ -126,7 +126,7 @@ def validate_all_docs(folder_path, code):
                 if(type(usage_error) != type(None) and len(usage_error) != 0):
                     error_messages.append(f"[신고 서류 사전 검토 결과 다음과 같은 재검토 사항을 발견하였습니다]")
                     error_messages.append(usage_error)
-                elif len(shape_error) == 0:
+                elif len(shape_error) == 1:
                     error_messages.append(f"[민원 서류 사전 검토 결과 보완 사항을 발견하지 못했습니다]\r\n")
         elif keyword == '주의사항':
             pfu_file = find_pdf_files_with_keyword(folder_path, keyword)
@@ -145,7 +145,7 @@ def validate_all_docs(folder_path, code):
                 if(type(pfu_error) != type(None) and len(pfu_error) != 0):
                     error_messages.append(f"[신고 서류 사전 검토 결과 다음과 같은 재검토 사항을 발견하였습니다]")
                     error_messages.append(pfu_error)
-                elif len(shape_error) == 0:
+                elif len(shape_error) == 1:
                     error_messages.append(f"[민원 서류 사전 검토 결과 보완 사항을 발견하지 못했습니다]\r\n")
         else:
             pass

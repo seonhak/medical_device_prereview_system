@@ -1,7 +1,6 @@
 import pdfplumber 
 from .required_pfu import *
 from .forbidden_words import *
-from .save_error_to_txt import save_error_to_file  # 에러 저장 함수
 from .validate_utils import *
 # 사용 시 주의사항
 

@@ -1,7 +1,7 @@
 import pdfplumber
 import os
 from scripts.validate.write_hwp_report import *
-from scripts.validate.testmat import *
+from scripts.validate.read_to_pdf_mat import *
 from scripts.validate.read_to_pdf_pfu import *
 from scripts.validate.read_to_pdf_shape import *
 from scripts.validate.read_to_pdf_size import *
