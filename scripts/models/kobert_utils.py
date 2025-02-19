@@ -11,10 +11,7 @@ def predict(text, tokenizer, model, device):
         outputs = model(input_ids=input_ids, attention_mask=attention_mask)
         logits = outputs.logits
     predictions = []
-    # 레이블 예측
     predicted_label = torch.argmax(logits, dim=1).item()
-    # print(type(predicted_label))
-    # print(predicted_label)
     return predicted_label
 
 
